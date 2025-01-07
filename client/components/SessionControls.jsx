@@ -42,7 +42,7 @@ function SessionActive({ stopSession, sendTextMessage }) {
           }
         }}
         type="text"
-        placeholder="send a text message..."
+        placeholder="Send a text message..."
         className="border border-gray-200 rounded-full p-4 flex-1"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -56,10 +56,10 @@ function SessionActive({ stopSession, sendTextMessage }) {
         icon={<MessageSquare height={16} />}
         className="bg-blue-400"
       >
-        send text
+        Send text
       </Button>
       <Button onClick={stopSession} icon={<CloudOff height={16} />}>
-        disconnect
+        Disconnect
       </Button>
     </div>
   );
