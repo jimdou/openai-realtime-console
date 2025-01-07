@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
 const functionDescription = `
-Call this function to book an appointment at Alain Coiffure. Open hours are Tuesday to Saturday from 9am to 6pm. Ask for an available time slot. Ask for a specific date and time. Ask for the name of the person booking the appointment. Ask for the name of the service. Ask for the phone number of the person booking the appointment. Ask for any additional notes.
-`;
+Call this function to book an appointment at Alain Coiffure. Open hours are Tuesday to Saturday from 9am to 6pm. Ask for an available time slot. Ask for a specific date and time. Ask for the name of the person booking the appointment. Ask for the name of the service. Ask for the phone number of the person booking the appointment. Ask for any additional notes. Ask for confirmation before booking the appointment.`;
 
 const sessionUpdate = {
   type: "session.update",
