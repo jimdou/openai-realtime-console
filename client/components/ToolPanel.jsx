@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const functionDescription = `
-Call this function to book an appointment at Alain Coiffure.
+Call this function to book an appointment at Alain Coiffure. Open hours are Tuesday to Saturday from 9am to 6pm. Ask for an available time slot. Ask for a specific date and time. Ask for the name of the person booking the appointment. Ask for the name of the service. Ask for the phone number of the person booking the appointment. Ask for any additional notes.
 `;
 
 const sessionUpdate = {
@@ -16,6 +16,14 @@ const sessionUpdate = {
           type: "object",
           strict: true,
           properties: {
+            name: {
+              type: "string",
+              description: "Name of the person booking the appointment.",
+            },
+            service: {
+              type: "string",
+              description: "Name of the service being booked.",
+            },
             date: {
               type: "string",
               description: "Date of the appointment in YYYY-MM-DD format.",
@@ -24,8 +32,16 @@ const sessionUpdate = {
               type: "string",
               description: "Time of the appointment in HH:MM format.",
             },
+            phone: {
+              type: "string",
+              description: "Phone number of the person booking the appointment.",
+            },
+            notes: {
+              type: "string",
+              description: "Additional notes for the appointment.",
+            },
           },
-          required: ["date", "time"],
+          required: ["name", "date", "time", "service", "phone", "notes"],
         },
       },
     ],
@@ -34,12 +50,16 @@ const sessionUpdate = {
 };
 
 function FunctionCallOutput({ functionCallOutput }) {
-  const { date, time } = JSON.parse(functionCallOutput.arguments);
+  const { name, date, time, service, phone, notes } = JSON.parse(functionCallOutput.arguments);
 
   return (
     <div className="flex flex-col gap-2">
       <p>Appointment Date: {date}</p>
       <p>Appointment Time: {time}</p>
+      <p>Service: {service}</p>
+      <p>Name: {name}</p>
+      <p>Phone: {phone}</p>
+      <p>Notes: {notes}</p>
       <pre className="text-xs bg-gray-100 rounded-md p-2 overflow-x-auto">
         {JSON.stringify(functionCallOutput, null, 2)}
       </pre>
