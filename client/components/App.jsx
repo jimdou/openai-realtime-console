@@ -217,21 +217,6 @@ export default function App() {
         <div className="flex items-center gap-4 w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
           <img style={{ width: "24px" }} src={logo} />
           <h1>PhoneVoice - Realtime console</h1>
-          <form onSubmit={handleSystemMessageSubmit} className="ml-4 flex items-center">
-            <textarea
-              value={systemMessage}
-              onChange={(e) => setSystemMessage(e.target.value)}
-              rows={4}
-              placeholder="Entrez votre message ici..."
-              className="border rounded-md p-2 w-full"
-            />
-            <button
-              type="submit"
-              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Update
-            </button>
-          </form>
         </div>
       </nav>
       <main className="absolute top-16 left-0 right-0 bottom-0">
@@ -252,11 +237,12 @@ export default function App() {
         </section>
         <section className="absolute top-0 w-[380px] right-0 bottom-0 p-4 pt-0 overflow-y-auto">
           <ToolPanel
-            sendClientEvent={sendClientEvent}
-            sendTextMessage={sendTextMessage}
-            events={events}
             isSessionActive={isSessionActive}
+            sendClientEvent={sendClientEvent}
+            events={events}
             systemMessage={systemMessage}
+            setSystemMessage={setSystemMessage}
+            handleSystemMessageSubmit={handleSystemMessageSubmit}
           />
         </section>
       </main>

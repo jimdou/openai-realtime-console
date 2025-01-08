@@ -71,7 +71,9 @@ export default function ToolPanel({
   isSessionActive,
   sendClientEvent,
   events,
-  systemMessage
+  systemMessage,
+  setSystemMessage,
+  handleSystemMessageSubmit,
 }) {
   const [functionAdded, setFunctionAdded] = useState(false);
   const [functionCallOutput, setFunctionCallOutput] = useState(null);
@@ -123,7 +125,25 @@ export default function ToolPanel({
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full bg-gray-50 rounded-md p-4">
         <h2 className="text-lg font-bold">Instructions</h2>
-        <p>{systemMessage}</p>
+        <form onSubmit={handleSystemMessageSubmit} className="w-full">
+          <div>
+          <textarea
+            value={systemMessage}
+            onChange={(e) => setSystemMessage(e.target.value)}
+            rows={4}
+            placeholder="Entrez votre message ici..."
+            className="border rounded-md p-2 w-full mb-3"
+          />
+          </div>
+          <div>
+          <button
+            type="submit"
+            onClick={handleSystemMessageSubmit}
+            className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-full mb-3"
+          >Update</button>
+          </div>
+        </form>
+
         <h2 className="text-lg font-bold">Function calling</h2>
         <p>
           Ask to book an appointment with Alain Coiffure. Open hours are Tuesday
