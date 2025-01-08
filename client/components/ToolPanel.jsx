@@ -41,7 +41,7 @@ const sessionUpdate = {
               description: "Additional notes for the appointment.",
             },
           },
-          required: ["name", "date", "time", "service", "phone", "notes"],
+          required: ["name", "date", "time", "service", "phone"],
         },
       },
     ],
@@ -71,6 +71,7 @@ export default function ToolPanel({
   isSessionActive,
   sendClientEvent,
   events,
+  systemMessage
 }) {
   const [functionAdded, setFunctionAdded] = useState(false);
   const [functionCallOutput, setFunctionCallOutput] = useState(null);
@@ -121,6 +122,16 @@ export default function ToolPanel({
   return (
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full bg-gray-50 rounded-md p-4">
+        <h2 className="text-lg font-bold">Instructions</h2>
+        <p>{systemMessage}</p>
+        <h2 className="text-lg font-bold">Instructions</h2>
+        <p>
+          Ask to book an appointment with Alain Coiffure. Open hours are Tuesday
+          to Saturday from 9am to 6pm. Ask for an available time slot. Ask for a
+          specific date and time. Ask for the name of the person booking the
+          appointment. Ask for the name of the service. Ask for the phone number
+          of the person booking the appointment.
+        </p>
         <h2 className="text-lg font-bold">Hairdresser Appointment Tool</h2>
         {isSessionActive ? (
           functionCallOutput ? (

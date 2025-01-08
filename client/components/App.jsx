@@ -5,6 +5,12 @@ import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
 
 export default function App() {
+
+  const [systemMessage, setSystemMessage] = useState(
+    // "Dis bonjour à l'utilisateur avec: Bonjour, comment puis-je vous aider aujourd'hui ?"
+    "You are a helpful assistant that can assist with tasks."
+  );
+
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
@@ -43,7 +49,7 @@ export default function App() {
     const model = "gpt-4o-realtime-preview-2024-12-17";
     const voice = "ash";
     // Supported values are: 'alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', and 'verse'.
-    
+
     const url = `${baseUrl}?model=${model}&voice=${voice}`;
     const sdpResponse = await fetch(url, {
       method: "POST",
@@ -61,6 +67,27 @@ export default function App() {
     await pc.setRemoteDescription(answer);
 
     peerConnection.current = pc;
+
+
+    // Envoyer un message système initial
+    console.log("Sending initial system message:", systemMessage);
+    if (dataChannel) {
+      const systemEvent = {
+        type: "conversation.item.create",
+        item: {
+          type: "message",
+          role: "system",
+          content: [
+            {
+              type: "input_text",
+              text: systemMessage, // Utilise le message système défini
+            },
+          ],
+        },
+      };
+      sendClientEvent(systemEvent);
+    }
+
   }
 
   // Stop current session, clean up peer connection and data channel
@@ -111,6 +138,40 @@ export default function App() {
     sendClientEvent({ type: "response.create" });
   }
 
+
+  function updateSystemMessage(newMessage) {
+    if (dataChannel) {
+      const updateEvent = {
+        type: "system.update",
+        content: [
+          {
+            type: "input_text",
+            text: newMessage,
+          },
+        ],
+      };
+      sendClientEvent(updateEvent);
+      setSystemMessage(newMessage);
+    }
+  }
+
+  function handleSystemMessageSubmit(e) {
+    e.preventDefault();
+    if (dataChannel) {
+      console.log("Sending updated system message:", systemMessage);
+      const updateEvent = {
+        type: "session.update",
+        session: {
+          instructions: systemMessage,
+        },
+      };
+      sendClientEvent(updateEvent);
+      setSystemMessage(systemMessage); // Met à jour l'état local
+    } else {
+      console.error("Data channel is not available to send the system message.");
+    }
+  }
+  
   // Attach event listeners to the data channel when a new one is created
   useEffect(() => {
     if (dataChannel) {
@@ -133,6 +194,21 @@ export default function App() {
         <div className="flex items-center gap-4 w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
           <img style={{ width: "24px" }} src={logo} />
           <h1>PhoneVoice - Realtime console</h1>
+          <form onSubmit={handleSystemMessageSubmit} className="ml-4 flex items-center">
+            <input
+              type="text"
+              placeholder="Set System Message"
+              value={systemMessage}
+              onChange={(e) => setSystemMessage(e.target.value)}
+              className="p-2 border border-gray-300 rounded mr-2"
+            />
+            <button
+              type="submit"
+              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Update
+            </button>
+          </form>
         </div>
       </nav>
       <main className="absolute top-16 left-0 right-0 bottom-0">
@@ -157,6 +233,7 @@ export default function App() {
             sendTextMessage={sendTextMessage}
             events={events}
             isSessionActive={isSessionActive}
+            systemMessage={systemMessage}
           />
         </section>
       </main>
