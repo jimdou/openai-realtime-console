@@ -1,13 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import logo from "/assets/openai-logomark.svg";
+// import logo from "/assets/openai-logomark.svg";
+import logo from "/assets/phonevoice-icon.svg";
 import EventLog from "./EventLog";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
 
 export default function App() {
+
+  const [systemMessage, setSystemMessage] = useState(
+    // "Dis bonjour à l'utilisateur avec: Bonjour, comment puis-je vous aider aujourd'hui ?"
+    "You are a helpful assistant that can assist with tasks."
+  );
+
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
+  const [roomName, setRoomName] = useState('');
+  const [roomId, setRoomId] = useState('');
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -41,7 +50,11 @@ export default function App() {
 
     const baseUrl = "https://api.openai.com/v1/realtime";
     const model = "gpt-4o-realtime-preview-2024-12-17";
-    const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+    const voice = "ash";
+    // Supported values are: 'alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', and 'verse'.
+
+    const url = `${baseUrl}?model=${model}&voice=${voice}`;
+    const sdpResponse = await fetch(url, {
       method: "POST",
       body: offer.sdp,
       headers: {
@@ -57,6 +70,27 @@ export default function App() {
     await pc.setRemoteDescription(answer);
 
     peerConnection.current = pc;
+
+
+    // Envoyer un message système initial
+    console.log("Sending initial system message:", systemMessage);
+    if (dataChannel) {
+      const systemEvent = {
+        type: "conversation.item.create",
+        item: {
+          type: "message",
+          role: "system",
+          content: [
+            {
+              type: "input_text",
+              text: systemMessage, // Utilise le message système défini
+            },
+          ],
+        },
+      };
+      sendClientEvent(systemEvent);
+    }
+
   }
 
   // Stop current session, clean up peer connection and data channel
@@ -107,6 +141,40 @@ export default function App() {
     sendClientEvent({ type: "response.create" });
   }
 
+
+  function updateSystemMessage(newMessage) {
+    if (dataChannel) {
+      const updateEvent = {
+        type: "system.update",
+        content: [
+          {
+            type: "input_text",
+            text: newMessage,
+          },
+        ],
+      };
+      sendClientEvent(updateEvent);
+      setSystemMessage(newMessage);
+    }
+  }
+
+  function handleSystemMessageSubmit(e) {
+    e.preventDefault();
+    if (dataChannel) {
+      console.log("Sending updated system message:", systemMessage);
+      const updateEvent = {
+        type: "session.update",
+        session: {
+          instructions: systemMessage,
+        },
+      };
+      sendClientEvent(updateEvent);
+      setSystemMessage(systemMessage); // Met à jour l'état local
+    } else {
+      console.error("Data channel is not available to send the system message.");
+    }
+  }
+  
   // Attach event listeners to the data channel when a new one is created
   useEffect(() => {
     if (dataChannel) {
@@ -123,12 +191,45 @@ export default function App() {
     }
   }, [dataChannel]);
 
+  const fetchRoomData = async (room_id) => {
+    console.log("Fetching room data for room ID:", room_id);
+    console.log("URL:", `https://api.phonevoice.ai/rooms/${room_id}.json`);
+    try {
+      const response = await fetch(`https://api.phonevoice.ai/rooms/${room_id}.json`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setSystemMessage(data.system_message);
+      setRoomName(data.name); // Ajout du nom de la Room à l'état
+      setRoomId(room_id);
+    } catch (error) {
+      console.error('Error fetching room data:', error);
+    }
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const room_id = params.get('room_id');
+    if (room_id) {
+      fetchRoomData(room_id);
+    }
+  }, []);
+
   return (
     <>
       <nav className="absolute top-0 left-0 right-0 h-16 flex items-center">
         <div className="flex items-center gap-4 w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
           <img style={{ width: "24px" }} src={logo} />
-          <h1>realtime console</h1>
+          <h1>
+            PhoneVoice - Realtime console
+            {roomName && ` - `}
+            {roomName && (
+              <a href={`https://phonevoice.ai/rooms/${roomId}`} className="text-blue-500 underline" target="_blank">
+                {roomName}
+              </a>
+            )}
+          </h1>
         </div>
       </nav>
       <main className="absolute top-16 left-0 right-0 bottom-0">
@@ -149,10 +250,12 @@ export default function App() {
         </section>
         <section className="absolute top-0 w-[380px] right-0 bottom-0 p-4 pt-0 overflow-y-auto">
           <ToolPanel
-            sendClientEvent={sendClientEvent}
-            sendTextMessage={sendTextMessage}
-            events={events}
             isSessionActive={isSessionActive}
+            sendClientEvent={sendClientEvent}
+            events={events}
+            systemMessage={systemMessage}
+            setSystemMessage={setSystemMessage}
+            handleSystemMessageSubmit={handleSystemMessageSubmit}
           />
         </section>
       </main>
