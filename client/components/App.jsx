@@ -188,6 +188,29 @@ export default function App() {
     }
   }, [dataChannel]);
 
+  const fetchRoomData = async (room_id) => {
+    console.log("Fetching room data for room ID:", room_id);
+    console.log("URL:", `https://api.phonevoice.ai/rooms/${room_id}.json`);
+    try {
+      const response = await fetch(`https://api.phonevoice.ai/rooms/${room_id}.json`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setSystemMessage(data.system_message);
+    } catch (error) {
+      console.error('Error fetching room data:', error);
+    }
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const room_id = params.get('room_id');
+    if (room_id) {
+      fetchRoomData(room_id);
+    }
+  }, []);
+
   return (
     <>
       <nav className="absolute top-0 left-0 right-0 h-16 flex items-center">
