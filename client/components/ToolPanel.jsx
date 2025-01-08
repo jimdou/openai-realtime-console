@@ -123,16 +123,16 @@ export default function ToolPanel({
 
   return (
     <section className="h-full w-full flex flex-col gap-4">
-      <div className="h-full bg-gray-50 rounded-md p-4">
+      <div className="h-full rounded-md p-4">
         <h2 className="text-lg font-bold">Instructions</h2>
         <form onSubmit={handleSystemMessageSubmit} className="w-full">
           <div>
           <textarea
             value={systemMessage}
             onChange={(e) => setSystemMessage(e.target.value)}
-            rows={4}
+            rows={10}
             placeholder="Entrez votre message ici..."
-            className="border rounded-md p-2 w-full mb-3"
+            className="border rounded-md p-2 w-full mb-3 bg-white text-black"
           />
           </div>
           <div>

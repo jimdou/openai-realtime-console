@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import logo from "/assets/openai-logomark.svg";
+// import logo from "/assets/openai-logomark.svg";
+import logo from "/assets/phonevoice-icon.svg";
 import EventLog from "./EventLog";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";

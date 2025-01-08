@@ -7,8 +7,17 @@ https://tailwindcss.com/docs/preflight
 @tailwind utilities;
 
 :root {
-  --color-base: #efefef;
+
+  --color-base: rgb(33, 37, 41);
   --color-highlight: #ff80ff;
+  --text-color: #ffffff;
+
+  --color-base-1: #080808;
+  --color-base-2: #171717;
+  --color-base-3: #212121;
+
+  /* --color-base: #efefef;
+  --color-highlight: #ff80ff; */
 }
 
 html,
@@ -20,5 +29,11 @@ body {
   overflow: hidden;
   font-family: "Consolas", "Andale Mono", monospace;
   font-size: 0.9rem;
-  background-color: var(--color-base);
+  /* background-color: var(--color-base); */
+  background-color: var(--color-base-3);
+  color: var(--text-color);
 }
+
+.bg-dark-1 { background-color: var(--color-base-1) !important; }
+.bg-dark-2 { background-color: var(--color-base-2) !important; }
+.bg-dark-3 { background-color: var(--color-base-3) !important; }
