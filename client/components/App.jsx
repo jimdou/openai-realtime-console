@@ -218,12 +218,12 @@ export default function App() {
           <img style={{ width: "24px" }} src={logo} />
           <h1>PhoneVoice - Realtime console</h1>
           <form onSubmit={handleSystemMessageSubmit} className="ml-4 flex items-center">
-            <input
-              type="text"
-              placeholder="Set System Message"
+            <textarea
               value={systemMessage}
               onChange={(e) => setSystemMessage(e.target.value)}
-              className="p-2 border border-gray-300 rounded mr-2"
+              rows={4}
+              placeholder="Entrez votre message ici..."
+              className="border rounded-md p-2 w-full"
             />
             <button
               type="submit"
