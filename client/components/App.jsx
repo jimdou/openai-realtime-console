@@ -41,7 +41,11 @@ export default function App() {
 
     const baseUrl = "https://api.openai.com/v1/realtime";
     const model = "gpt-4o-realtime-preview-2024-12-17";
-    const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+    const voice = "ash";
+    // Supported values are: 'alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', and 'verse'.
+    
+    const url = `${baseUrl}?model=${model}&voice=${voice}`;
+    const sdpResponse = await fetch(url, {
       method: "POST",
       body: offer.sdp,
       headers: {
