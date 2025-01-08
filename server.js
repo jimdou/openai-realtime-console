@@ -52,4 +52,4 @@ server.get("/token", async () => {
   });
 });
 
-await server.listen({ port: process.env.PORT || 3000 });
+await server.listen({ port: process.env.PORT || 3001 });
