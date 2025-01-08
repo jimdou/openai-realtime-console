@@ -124,7 +124,7 @@ export default function ToolPanel({
       <div className="h-full bg-gray-50 rounded-md p-4">
         <h2 className="text-lg font-bold">Instructions</h2>
         <p>{systemMessage}</p>
-        <h2 className="text-lg font-bold">Instructions</h2>
+        <h2 className="text-lg font-bold">Function calling</h2>
         <p>
           Ask to book an appointment with Alain Coiffure. Open hours are Tuesday
           to Saturday from 9am to 6pm. Ask for an available time slot. Ask for a
