@@ -16,6 +16,7 @@ export default function App() {
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
   const [roomName, setRoomName] = useState('');
+  const [roomId, setRoomId] = useState('');
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -201,6 +202,7 @@ export default function App() {
       const data = await response.json();
       setSystemMessage(data.system_message);
       setRoomName(data.name); // Ajout du nom de la Room à l'état
+      setRoomId(room_id);
     } catch (error) {
       console.error('Error fetching room data:', error);
     }
@@ -219,7 +221,15 @@ export default function App() {
       <nav className="absolute top-0 left-0 right-0 h-16 flex items-center">
         <div className="flex items-center gap-4 w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
           <img style={{ width: "24px" }} src={logo} />
-          <h1>PhoneVoice - Realtime console {roomName && ` - ${roomName}`}</h1>
+          <h1>
+            PhoneVoice - Realtime console
+            {roomName && ` - `}
+            {roomName && (
+              <a href={`https://phonevoice.ai/rooms/${roomId}`} className="text-blue-500 underline" target="_blank">
+                {roomName}
+              </a>
+            )}
+          </h1>
         </div>
       </nav>
       <main className="absolute top-16 left-0 right-0 bottom-0">
