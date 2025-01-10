@@ -55,10 +55,13 @@ server.get("/token", async () => {
 // await server.listen({ port: process.env.PORT || 3001 });
 
 try {
-  await server.listen({ port: process.env.PORT || 3001 });
+  await server.listen({
+    port: process.env.PORT || 3001,
+    host: '0.0.0.0', // Important for Heroku
+  });
   console.log(`Server is running on port ${process.env.PORT || 3001}`);
 } catch (err) {
-  console.log(`Server is not running on port ${process.env.PORT || 3001}`);
   server.log.error(err);
   process.exit(1);
 }
+
