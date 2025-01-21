@@ -9,7 +9,7 @@ export default function App() {
 
   const [systemMessage, setSystemMessage] = useState(
     // "Dis bonjour à l'utilisateur avec: Bonjour, comment puis-je vous aider aujourd'hui ?"
-    "You are a helpful assistant that can assist with tasks."
+    "You are a friendly and helpful assistant. Talk quickly."
   );
 
   const [isSessionActive, setIsSessionActive] = useState(false);
