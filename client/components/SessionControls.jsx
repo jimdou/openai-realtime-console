@@ -19,13 +19,13 @@ function SessionStopped({ startSession }) {
         className={isActivating ? "bg-gray-600" : "bg-red-600"}
         icon={<CloudLightning height={16} />}
       >
-        {isActivating ? "starting session..." : "start session"}
+        {isActivating ? "Starting session..." : "Speak with assistant"}
       </Button>
     </div>
   );
 }
 
-function SessionActive({ stopSession, sendTextMessage }) {
+function SessionActive({ stopSession, sendTextMessage, layout }) {
   const [message, setMessage] = useState("");
 
   function handleSendClientEvent() {
@@ -35,29 +35,33 @@ function SessionActive({ stopSession, sendTextMessage }) {
 
   return (
     <div className="flex items-center justify-center w-full h-full gap-4">
-      <input
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && message.trim()) {
-            handleSendClientEvent();
-          }
-        }}
-        type="text"
-        placeholder="Send a text message..."
-        className="border border-gray-200 rounded-full p-4 flex-1"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <Button
-        onClick={() => {
-          if (message.trim()) {
-            handleSendClientEvent();
-          }
-        }}
-        icon={<MessageSquare height={16} />}
-        className="bg-blue-400"
-      >
-        Send text
-      </Button>
+      {layout !== "button" && (
+        <>
+          <input
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && message.trim()) {
+                handleSendClientEvent();
+              }
+            }}
+            type="text"
+          placeholder="Send a text message..."
+          className="border border-gray-200 rounded-full p-4 flex-1"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <Button
+          onClick={() => {
+            if (message.trim()) {
+              handleSendClientEvent();
+            }
+          }}
+          icon={<MessageSquare height={16} />}
+          className="bg-blue-400"
+        >
+          Send text
+        </Button>
+      </>
+      )} 
       <Button onClick={stopSession} icon={<CloudOff height={16} />}>
         Disconnect
       </Button>
@@ -83,6 +87,7 @@ export default function SessionControls({
           sendClientEvent={sendClientEvent}
           sendTextMessage={sendTextMessage}
           serverEvents={serverEvents}
+          layout={layout}
         />
       ) : (
         <SessionStopped startSession={startSession} />
