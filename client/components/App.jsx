@@ -17,6 +17,7 @@ export default function App() {
   const [dataChannel, setDataChannel] = useState(null);
   const [roomName, setRoomName] = useState('');
   const [roomId, setRoomId] = useState('');
+  const [layout, setLayout] = useState('button');
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -216,49 +217,102 @@ export default function App() {
     }
   }, []);
 
-  return (
-    <>
-      <nav className="absolute top-0 left-0 right-0 h-16 flex items-center">
-        <div className="flex items-center gap-4 w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
-          <img style={{ width: "24px" }} src={logo} />
-          <h1>
-            PhoneVoice - Realtime console
-            {roomName && ` - `}
-            {roomName && (
-              <a href={`https://phonevoice.ai/rooms/${roomId}`} className="text-blue-500 underline" target="_blank">
-                {roomName}
-              </a>
-            )}
-          </h1>
-        </div>
-      </nav>
-      <main className="absolute top-16 left-0 right-0 bottom-0">
-        <section className="absolute top-0 left-0 right-[380px] bottom-0 flex">
-          <section className="absolute top-0 left-0 right-0 bottom-32 px-4 overflow-y-auto">
-            <EventLog events={events} />
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const layout = params.get('layout');
+    if (layout) {
+      setLayout(layout);
+    }
+  }, []);
+
+  if (layout === "button") {
+    return (
+      <SessionControls
+        startSession={startSession}
+        stopSession={stopSession}
+        sendClientEvent={sendClientEvent}
+        sendTextMessage={sendTextMessage}
+        events={events}
+        isSessionActive={isSessionActive}
+        layout={layout}
+      />
+    );
+  }
+
+  if (layout === "blank") {
+    return (
+      <>
+        <main className="absolute top-5 left-0 right-0 bottom-0">
+          <section className="absolute top-0 left-0 right-0 bottom-0 flex">
+            <section className="absolute top-0 left-0 right-0 bottom-32 px-4 overflow-y-auto">
+              <EventLog events={events} />
+            </section>
+            <section className="absolute h-32 left-0 right-0 bottom-0 p-4">
+              <SessionControls
+                startSession={startSession}
+                stopSession={stopSession}
+                sendClientEvent={sendClientEvent}
+                sendTextMessage={sendTextMessage}
+                events={events}
+                isSessionActive={isSessionActive}
+              />
+            </section>
           </section>
-          <section className="absolute h-32 left-0 right-0 bottom-0 p-4">
-            <SessionControls
-              startSession={startSession}
-              stopSession={stopSession}
-              sendClientEvent={sendClientEvent}
-              sendTextMessage={sendTextMessage}
-              events={events}
-              isSessionActive={isSessionActive}
-            />
+        </main>
+      </>
+    );
+  }
+
+  if (layout === "full") {
+    
+
+    return (
+      <>
+        <nav className="absolute top-0 left-0 right-0 h-16 flex items-center">
+          <div className="flex items-center gap-4 w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
+            <img style={{ width: "24px" }} src={logo} />
+            <h1>
+              PhoneVoice - Realtime console
+              {roomName && ` - `}
+              {roomName && (
+                <a href={`https://phonevoice.ai/rooms/${roomId}`} className="text-blue-500 underline" target="_blank">
+                  {roomName}
+                </a>
+              )}
+            </h1>
+          </div>
+        </nav>
+        <main className="absolute top-16 left-0 right-0 bottom-0">
+          <section className="absolute top-0 left-0 right-[380px] bottom-0 flex">
+            <section className="absolute top-0 left-0 right-0 bottom-32 px-4 overflow-y-auto">
+              <EventLog events={events} />
+            </section>
+            <section className="absolute h-32 left-0 right-0 bottom-0 p-4">
+              <SessionControls
+                startSession={startSession}
+                stopSession={stopSession}
+                sendClientEvent={sendClientEvent}
+                sendTextMessage={sendTextMessage}
+                events={events}
+                isSessionActive={isSessionActive}
+              />
+            </section>
           </section>
-        </section>
-        <section className="absolute top-0 w-[380px] right-0 bottom-0 p-4 pt-0 overflow-y-auto">
-          <ToolPanel
-            isSessionActive={isSessionActive}
-            sendClientEvent={sendClientEvent}
-            events={events}
-            systemMessage={systemMessage}
-            setSystemMessage={setSystemMessage}
-            handleSystemMessageSubmit={handleSystemMessageSubmit}
-          />
-        </section>
-      </main>
-    </>
-  );
+          {layout !== 'blank' && (
+            <section className="absolute top-0 w-[380px] right-0 bottom-0 p-4 pt-0 overflow-y-auto">
+              <ToolPanel
+                isSessionActive={isSessionActive}
+                sendClientEvent={sendClientEvent}
+                events={events}
+                systemMessage={systemMessage}
+                setSystemMessage={setSystemMessage}
+                handleSystemMessageSubmit={handleSystemMessageSubmit}
+                layout={layout}
+              />
+            </section>
+          )}
+        </main>
+      </>
+    );
+  }
 }
