@@ -146,18 +146,14 @@ export default function ToolPanel({
 
         <h2 className="text-lg font-bold">Function calling</h2>
         <p>
-          Ask to book an appointment with Alain Coiffure. Open hours are Tuesday
-          to Saturday from 9am to 6pm. Ask for an available time slot. Ask for a
-          specific date and time. Ask for the name of the person booking the
-          appointment. Ask for the name of the service. Ask for the phone number
-          of the person booking the appointment.
+          Ask to book an appointment.
         </p>
-        <h2 className="text-lg font-bold">Hairdresser Appointment Tool</h2>
+        <h2 className="text-lg font-bold">Appointment Tool</h2>
         {isSessionActive ? (
           functionCallOutput ? (
             <FunctionCallOutput functionCallOutput={functionCallOutput} />
           ) : (
-            <p>Ask to book an appointment with Alain Coiffure...</p>
+            <p>Ask to book an appointment...</p>
           )
         ) : (
           <p>Start the session to use this tool...</p>
