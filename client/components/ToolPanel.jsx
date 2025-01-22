@@ -144,11 +144,7 @@ export default function ToolPanel({
           </div>
         </form>
 
-        <h2 className="text-lg font-bold">Function calling</h2>
-        <p>
-          Ask to book an appointment.
-        </p>
-        <h2 className="text-lg font-bold">Appointment Tool</h2>
+        <h2 className="text-lg font-bold">Book Appointment Tool</h2>
         {isSessionActive ? (
           functionCallOutput ? (
             <FunctionCallOutput functionCallOutput={functionCallOutput} />
