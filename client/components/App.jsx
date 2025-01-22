@@ -283,7 +283,7 @@ export default function App() {
                 events={events}
                 systemMessage={systemMessage}
                 setSystemMessage={setSystemMessage}
-                handleSystemMessageSubmit={updateSystemMessage}
+                updateSystemMessage={updateSystemMessage}
                 layout={layout}
               />
             </section>
