@@ -73,7 +73,7 @@ export default function ToolPanel({
   events,
   systemMessage,
   setSystemMessage,
-  handleSystemMessageSubmit,
+  updateSystemMessage,
 }) {
   const [functionAdded, setFunctionAdded] = useState(false);
   const [functionCallOutput, setFunctionCallOutput] = useState(null);
@@ -125,7 +125,7 @@ export default function ToolPanel({
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full rounded-md p-4">
         <h2 className="text-lg font-bold">Instructions</h2>
-        <form onSubmit={handleSystemMessageSubmit} className="w-full">
+        <form onSubmit={updateSystemMessage} className="w-full">
           <div>
           <textarea
             value={systemMessage}
@@ -138,7 +138,7 @@ export default function ToolPanel({
           <div>
           <button
             type="submit"
-            onClick={handleSystemMessageSubmit}
+            onClick={updateSystemMessage}
             className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-full mb-3"
           >Update</button>
           </div>
