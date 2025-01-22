@@ -125,7 +125,10 @@ export default function ToolPanel({
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full rounded-md p-4">
         <h2 className="text-lg font-bold">Instructions</h2>
-        <form onSubmit={updateSystemMessage} className="w-full">
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          updateSystemMessage();
+        }} className="w-full">
           <div>
           <textarea
             value={systemMessage}
