@@ -54,7 +54,7 @@ export default function App() {
     const voice = "ash";
     // Supported values are: 'alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', and 'verse'.
 
-    const url = `${baseUrl}?model=${model}&voice=${voice}`;
+    const url = `${baseUrl}?model=${model}&voice=${voice}&instructions=${encodeURIComponent(systemMessage)}`;
     const sdpResponse = await fetch(url, {
       method: "POST",
       body: offer.sdp,
@@ -71,27 +71,6 @@ export default function App() {
     await pc.setRemoteDescription(answer);
 
     peerConnection.current = pc;
-
-
-    // Envoyer un message système initial
-    console.log("Sending initial system message:", systemMessage);
-    if (dataChannel) {
-      const systemEvent = {
-        type: "conversation.item.create",
-        item: {
-          type: "message",
-          role: "system",
-          content: [
-            {
-              type: "input_text",
-              text: systemMessage, // Utilise le message système défini
-            },
-          ],
-        },
-      };
-      sendClientEvent(systemEvent);
-    }
-
   }
 
   // Stop current session, clean up peer connection and data channel
