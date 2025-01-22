@@ -43,6 +43,39 @@ export default function App() {
 
     // Set up data channel for sending and receiving events
     const dc = pc.createDataChannel("oai-events");
+    
+    // Attendre que le canal soit ouvert pour envoyer le message initial
+    dc.onopen = () => {
+      console.log("Data channel is open, waiting before sending initial message");
+      
+      // Attendre un peu avant d'envoyer les messages
+      setTimeout(() => {
+        console.log("Sending initial messages");
+        // Créer un message initial pour faire parler l'assistant
+        const initialMessage = {
+          type: "conversation.item.create",
+          item: {
+            type: "message",
+            role: "user",
+            content: [
+              {
+                type: "input_text",
+                text: "Dis bonjour",
+              },
+            ],
+          },
+        };
+        // Utiliser directement le canal de données
+        dc.send(JSON.stringify(initialMessage));
+
+        // Demander une réponse de l'assistant
+        const responseRequest = {
+          type: "response.create"
+        };
+        dc.send(JSON.stringify(responseRequest));
+      }, 100);
+    };
+
     setDataChannel(dc);
 
     // Start the session using the Session Description Protocol (SDP)
@@ -71,6 +104,7 @@ export default function App() {
     await pc.setRemoteDescription(answer);
 
     peerConnection.current = pc;
+
   }
 
   // Stop current session, clean up peer connection and data channel
