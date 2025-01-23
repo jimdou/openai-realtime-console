@@ -21,6 +21,7 @@ export default function App() {
   const [isLayoutLoaded, setIsLayoutLoaded] = useState(false);
   const [isRoomLoaded, setIsRoomLoaded] = useState(false);
   const [hasRoomError, setHasRoomError] = useState(false);
+  const [firstMessage, setFirstMessage] = useState('');
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -63,7 +64,7 @@ export default function App() {
             content: [
               {
                 type: "input_text",
-                text: "Dis bonjour",
+                text: firstMessage ? `Dis bonjour au user en disant: ${firstMessage}` : "Dis bonjour",
               },
             ],
           },
@@ -220,6 +221,7 @@ export default function App() {
       setSystemMessage(data.system_message);
       setRoomName(data.name); // Ajout du nom de la Room à l'état
       setRoomId(room_id);
+      setFirstMessage(data.first_message || '');
       setHasRoomError(false);
     } catch (error) {
       console.error('Error fetching room data:', error);
