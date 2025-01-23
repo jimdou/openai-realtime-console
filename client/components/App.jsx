@@ -18,6 +18,7 @@ export default function App() {
   const [roomName, setRoomName] = useState('');
   const [roomId, setRoomId] = useState('');
   const [layout, setLayout] = useState('button');
+  const [isLayoutLoaded, setIsLayoutLoaded] = useState(false);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -236,7 +237,21 @@ export default function App() {
     if (layout) {
       setLayout(layout);
     }
+    setIsLayoutLoaded(true);
   }, []);
+
+  if (!isLayoutLoaded) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        Loading...
+      </div>
+    );
+  }
 
   if (layout === "button") {
     return (
