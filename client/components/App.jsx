@@ -19,6 +19,8 @@ export default function App() {
   const [roomId, setRoomId] = useState('');
   const [layout, setLayout] = useState('button');
   const [isLayoutLoaded, setIsLayoutLoaded] = useState(false);
+  const [isRoomLoaded, setIsRoomLoaded] = useState(false);
+  const [hasRoomError, setHasRoomError] = useState(false);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -212,22 +214,28 @@ export default function App() {
     try {
       const response = await fetch(`https://api.phonevoice.ai/rooms/${room_id}.json`);
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Unable to fetch room data.');
       }
       const data = await response.json();
       setSystemMessage(data.system_message);
       setRoomName(data.name); // Ajout du nom de la Room à l'état
       setRoomId(room_id);
+      setHasRoomError(false);
     } catch (error) {
       console.error('Error fetching room data:', error);
+      setHasRoomError(true);
     }
+    setIsRoomLoaded(true);
   };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const room_id = params.get('room_id');
+    setRoomId(room_id);
     if (room_id) {
       fetchRoomData(room_id);
+    } else {
+      setIsRoomLoaded(true);
     }
   }, []);
 
@@ -240,7 +248,22 @@ export default function App() {
     setIsLayoutLoaded(true);
   }, []);
 
-  if (!isLayoutLoaded) {
+  const LoadingScreen = () => (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh' 
+    }}>
+      Loading...
+    </div>
+  );
+
+  if (!isLayoutLoaded || !isRoomLoaded) {
+    return <LoadingScreen />;
+  }
+
+  if (hasRoomError && roomId) {
     return (
       <div style={{ 
         display: 'flex', 
@@ -248,7 +271,7 @@ export default function App() {
         alignItems: 'center', 
         height: '100vh' 
       }}>
-        Loading...
+        Unable to load room data.
       </div>
     );
   }
