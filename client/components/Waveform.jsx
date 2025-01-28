@@ -91,12 +91,12 @@ const Waveform = ({ color1, color2, label1, label2, analyserNode1, analyserNode2
         width={500}
         height={100}
       />
-      <div className="absolute top-2 left-2 text-sm font-medium text-gray-500">
+      {/* <div className="absolute top-2 left-2 text-sm font-medium text-gray-500">
         {label1}
       </div>
       <div className="absolute top-2 right-2 text-sm font-medium text-gray-500">
         {label2}
-      </div>
+      </div> */}
     </div>
   );
 };
