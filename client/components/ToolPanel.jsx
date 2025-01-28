@@ -125,10 +125,8 @@ export default function ToolPanel({
   return (
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full rounded-md p-4">
-
-
         <div className="mb-4">
-          <label htmlFor="voiceSelect" className="block text-sm font-medium mb-1">Sélectionnez une voix</label>
+          <h2 className="text-lg font-bold mb-1">Select a voice</h2>
           <select
             id="voiceSelect"
             className="w-full p-2 border rounded-md bg-white text-black"
@@ -142,7 +140,6 @@ export default function ToolPanel({
             ))}
           </select>
         </div>
-
 
         <h2 className="text-lg font-bold">Instructions</h2>
         <form onSubmit={(e) => {
