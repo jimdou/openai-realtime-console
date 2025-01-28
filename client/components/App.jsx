@@ -588,16 +588,16 @@ export default function App() {
             <section className="absolute bottom-32 left-0 right-0 h-24 px-4 flex flex-col gap-2">
               <div className="h-1/2">
                 <Waveform 
-                  color="#3b82f6"
-                  darkColor="#1d4ed8"
+                  color="rgba(255, 134, 71, 1)"
+                  darkColor="rgba(255, 134, 71, 0.6)"
                   label="Assistant"
                   analyserNode={assistantAnalyser.current}
                 />
               </div>
               <div className="h-1/2">
-                <Waveform 
-                  color="#22c55e"
-                  darkColor="#15803d"
+                <Waveform
+                  color="rgba(255, 64, 19, 1)"
+                  darkColor="rgba(255, 64, 19, 0.6)"
                   label="User"
                   analyserNode={userAnalyser.current}
                 />
@@ -644,16 +644,16 @@ export default function App() {
             <section className="h-24 px-4 flex flex-col gap-2">
               <div className="h-1/2">
                 <Waveform 
-                  color="#3b82f6"
-                  darkColor="#1d4ed8"
+                  color="rgba(255, 134, 71, 1)"
+                  darkColor="rgba(255, 134, 71, 0.6)"
                   label="Assistant"
                   analyserNode={assistantAnalyser.current}
                 />
               </div>
               <div className="h-1/2">
-                <Waveform 
-                  color="#22c55e"
-                  darkColor="#15803d"
+                <Waveform
+                  color="rgba(255, 64, 19, 1)"
+                  darkColor="rgba(255, 64, 19, 0.6)"
                   label="User"
                   analyserNode={userAnalyser.current}
                 />
