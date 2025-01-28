@@ -565,37 +565,42 @@ export default function App() {
 
   if (layout === "button" || layout === "smart") {
     return (
-      <>
-        <SessionControls
-          startSession={startSession}
-          stopSession={stopSession}
-          sendClientEvent={sendClientEvent}
-          sendTextMessage={sendTextMessage}
-          events={events}
-          isSessionActive={isSessionActive}
-          layout={layout}
-        />
-        {(layout === "button" || (layout === "smart" && isSessionActive)) && (
-          <section className="h-24 px-4 flex flex-col gap-2">
-            <div className="h-1/2">
-              <Waveform 
-                color="rgba(255, 134, 71, 1)"
-                darkColor="rgba(255, 134, 71, 0.6)"
-                label="Assistant"
-                analyserNode={assistantAnalyser.current}
-              />
-            </div>
-            <div className="h-1/2">
-              <Waveform
-                color="rgba(255, 64, 19, 1)"
-                darkColor="rgba(255, 64, 19, 0.6)"
-                label="User"
-                analyserNode={userAnalyser.current}
-              />
+      <div className="flex gap-4 items-center">
+        {(layout === "smart" && isSessionActive) && (
+          <section className="flex-1">
+            <div className="flex flex-col gap-2">
+              <div className="h-[100px]">
+                <Waveform 
+                  color="rgba(255, 134, 71, 1)"
+                  darkColor="rgba(255, 134, 71, 0.6)"
+                  label="Assistant"
+                  analyserNode={assistantAnalyser.current}
+                />
+              </div>
+              <div className="h-[100px]">
+                <Waveform
+                  color="rgba(255, 64, 19, 1)"
+                  darkColor="rgba(255, 64, 19, 0.6)"
+                  label="User"
+                  analyserNode={userAnalyser.current}
+                />
+              </div>
             </div>
           </section>
         )}
-      </>
+        {!isSessionActive && <div className="flex-1" />}
+        <section>
+          <SessionControls
+            startSession={startSession}
+            stopSession={stopSession}
+            sendClientEvent={sendClientEvent}
+            sendTextMessage={sendTextMessage}
+            events={events}
+            isSessionActive={isSessionActive}
+            layout={layout}
+          />
+        </section>
+      </div>
     );
   }
 

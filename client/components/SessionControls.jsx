@@ -13,14 +13,16 @@ function SessionStopped({ startSession }) {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-full">
-      <Button
-        onClick={handleStartSession}
-        className={isActivating ? "bg-gray-600" : "bg-red-600"}
-        icon={<CloudLightning height={16} />}
-      >
-        {isActivating ? "Starting session..." : "Speak with assistant"}
-      </Button>
+    <div className="flex items-center justify-end w-full h-full">
+      <div className="flex flex-col gap-2">
+        <Button
+          onClick={handleStartSession}
+          className={isActivating ? "bg-gray-600" : "bg-red-600"}
+          icon={<CloudLightning height={16} />}
+        >
+          {isActivating ? "Starting session..." : "Speak with assistant"}
+        </Button>
+      </div>
     </div>
   );
 }
@@ -62,9 +64,11 @@ function SessionActive({ stopSession, sendTextMessage, layout }) {
           </Button>
         </>
       )}
-      <Button onClick={stopSession} icon={<CloudOff height={16} />}>
-        Disconnect
-      </Button>
+      <div className="flex flex-col gap-2">
+        <Button onClick={stopSession} icon={<CloudOff height={16} />}>
+          Disconnect
+        </Button>
+      </div>
     </div>
   );
 }
