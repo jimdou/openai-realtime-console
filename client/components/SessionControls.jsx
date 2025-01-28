@@ -35,7 +35,7 @@ function SessionActive({ stopSession, sendTextMessage, layout }) {
 
   return (
     <div className="flex items-center justify-center w-full h-full gap-4">
-      {layout !== "button" && (
+      {layout !== "button" && layout !== "smart" && (
         <>
           <input
             onKeyDown={(e) => {
@@ -44,24 +44,24 @@ function SessionActive({ stopSession, sendTextMessage, layout }) {
               }
             }}
             type="text"
-          placeholder="Send a text message..."
-          className="border border-gray-200 rounded-full p-4 flex-1"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <Button
-          onClick={() => {
-            if (message.trim()) {
-              handleSendClientEvent();
-            }
-          }}
-          icon={<MessageSquare height={16} />}
-          className="bg-blue-400"
-        >
-          Send text
-        </Button>
-      </>
-      )} 
+            placeholder="Send a text message..."
+            className="border border-gray-200 rounded-full p-4 flex-1"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <Button
+            onClick={() => {
+              if (message.trim()) {
+                handleSendClientEvent();
+              }
+            }}
+            icon={<MessageSquare height={16} />}
+            className="bg-blue-400"
+          >
+            Send text
+          </Button>
+        </>
+      )}
       <Button onClick={stopSession} icon={<CloudOff height={16} />}>
         Disconnect
       </Button>
@@ -79,7 +79,6 @@ export default function SessionControls({
   layout,
 }) {
   return (
-    // <div className={layout !== "button" ? "flex gap-4 border-gray-200 h-full rounded-md bg-gray-800" : ""}>
     <div className={layout !== "button" ? "flex gap-4 border-gray-200 h-full rounded-md bg-dark-2" : ""}>
       {isSessionActive ? (
         <SessionActive

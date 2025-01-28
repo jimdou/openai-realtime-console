@@ -563,17 +563,39 @@ export default function App() {
     );
   }
 
-  if (layout === "button") {
+  if (layout === "button" || layout === "smart") {
     return (
-      <SessionControls
-        startSession={startSession}
-        stopSession={stopSession}
-        sendClientEvent={sendClientEvent}
-        sendTextMessage={sendTextMessage}
-        events={events}
-        isSessionActive={isSessionActive}
-        layout={layout}
-      />
+      <>
+        <SessionControls
+          startSession={startSession}
+          stopSession={stopSession}
+          sendClientEvent={sendClientEvent}
+          sendTextMessage={sendTextMessage}
+          events={events}
+          isSessionActive={isSessionActive}
+          layout={layout}
+        />
+        {(layout === "button" || (layout === "smart" && isSessionActive)) && (
+          <section className="h-24 px-4 flex flex-col gap-2">
+            <div className="h-1/2">
+              <Waveform 
+                color="rgba(255, 134, 71, 1)"
+                darkColor="rgba(255, 134, 71, 0.6)"
+                label="Assistant"
+                analyserNode={assistantAnalyser.current}
+              />
+            </div>
+            <div className="h-1/2">
+              <Waveform
+                color="rgba(255, 64, 19, 1)"
+                darkColor="rgba(255, 64, 19, 0.6)"
+                label="User"
+                analyserNode={userAnalyser.current}
+              />
+            </div>
+          </section>
+        )}
+      </>
     );
   }
 
@@ -584,26 +606,24 @@ export default function App() {
           <section className="absolute top-0 left-0 right-0 bottom-32 px-4 overflow-y-auto">
             <EventLog events={events} />
           </section>
-          {layout === "waveform" && (
-            <section className="absolute bottom-32 left-0 right-0 h-24 px-4 flex flex-col gap-2">
-              <div className="h-1/2">
-                <Waveform 
-                  color="rgba(255, 134, 71, 1)"
-                  darkColor="rgba(255, 134, 71, 0.6)"
-                  label="Assistant"
-                  analyserNode={assistantAnalyser.current}
-                />
-              </div>
-              <div className="h-1/2">
-                <Waveform
-                  color="rgba(255, 64, 19, 1)"
-                  darkColor="rgba(255, 64, 19, 0.6)"
-                  label="User"
-                  analyserNode={userAnalyser.current}
-                />
-              </div>
-            </section>
-          )}
+          <section className="absolute bottom-32 left-0 right-0 h-24 px-4 flex flex-col gap-2">
+            <div className="h-1/2">
+              <Waveform 
+                color="rgba(255, 134, 71, 1)"
+                darkColor="rgba(255, 134, 71, 0.6)"
+                label="Assistant"
+                analyserNode={assistantAnalyser.current}
+              />
+            </div>
+            <div className="h-1/2">
+              <Waveform
+                color="rgba(255, 64, 19, 1)"
+                darkColor="rgba(255, 64, 19, 0.6)"
+                label="User"
+                analyserNode={userAnalyser.current}
+              />
+            </div>
+          </section>
           <section className="absolute h-32 left-0 right-0 bottom-0 p-4">
             <SessionControls
               startSession={startSession}
@@ -612,6 +632,8 @@ export default function App() {
               sendTextMessage={sendTextMessage}
               events={events}
               isSessionActive={isSessionActive}
+              userAnalyser={userAnalyser.current}
+              assistantAnalyser={assistantAnalyser.current}
             />
           </section>
         </main>
@@ -640,26 +662,6 @@ export default function App() {
           <section className="flex-1 overflow-y-auto px-4">
             <EventLog events={events} />
           </section>
-          {layout === "waveform" && (
-            <section className="h-24 px-4 flex flex-col gap-2">
-              <div className="h-1/2">
-                <Waveform 
-                  color="rgba(255, 134, 71, 1)"
-                  darkColor="rgba(255, 134, 71, 0.6)"
-                  label="Assistant"
-                  analyserNode={assistantAnalyser.current}
-                />
-              </div>
-              <div className="h-1/2">
-                <Waveform
-                  color="rgba(255, 64, 19, 1)"
-                  darkColor="rgba(255, 64, 19, 0.6)"
-                  label="User"
-                  analyserNode={userAnalyser.current}
-                />
-              </div>
-            </section>
-          )}
           <section className="h-32 p-4">
             <SessionControls
               startSession={startSession}
@@ -668,6 +670,8 @@ export default function App() {
               sendTextMessage={sendTextMessage}
               events={events}
               isSessionActive={isSessionActive}
+              userAnalyser={userAnalyser.current}
+              assistantAnalyser={assistantAnalyser.current}
             />
           </section>
         </section>
