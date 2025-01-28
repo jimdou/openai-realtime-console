@@ -35,11 +35,13 @@ const Waveform = ({ color1, color2, label1, label2, analyserNode1, analyserNode2
         ctx.beginPath();
         ctx.moveTo(0, height);
 
-        const sliceWidth = width / dataArray.length;
+        // On prend 50% des fréquences
+        const usefulData = dataArray.slice(0, Math.floor(dataArray.length * 0.5));
+        const sliceWidth = width / usefulData.length;
         let x = 0;
 
-        for (let i = 0; i < dataArray.length; i++) {
-          const v = dataArray[i] / 128.0;
+        for (let i = 0; i < usefulData.length; i++) {
+          const v = Math.min(2.0, usefulData[i] / 128.0);
           const y = height - (v * height / 2);
 
           if (i === 0) {
@@ -51,7 +53,6 @@ const Waveform = ({ color1, color2, label1, label2, analyserNode1, analyserNode2
           x += sliceWidth;
         }
 
-        ctx.lineTo(width, height);
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
         ctx.stroke();
