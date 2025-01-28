@@ -27,14 +27,14 @@ const Waveform = ({ color, darkColor, label, analyserNode }) => {
 
       // Dessiner la forme d'onde
       ctx.beginPath();
-      ctx.moveTo(0, height / 2);
+      ctx.moveTo(0, height);
 
       const sliceWidth = width / dataArray.current.length;
       let x = 0;
 
       for (let i = 0; i < dataArray.current.length; i++) {
         const v = dataArray.current[i] / 128.0;
-        const y = (v * height) / 2;
+        const y = height - (v * height / 2);
 
         if (i === 0) {
           ctx.moveTo(x, y);
@@ -45,7 +45,7 @@ const Waveform = ({ color, darkColor, label, analyserNode }) => {
         x += sliceWidth;
       }
 
-      ctx.lineTo(width, height / 2);
+      ctx.lineTo(width, height);
       ctx.strokeStyle = color;
       ctx.lineWidth = 2;
       ctx.stroke();

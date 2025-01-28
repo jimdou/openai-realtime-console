@@ -667,6 +667,26 @@ export default function App() {
           <section className="flex-1 overflow-y-auto px-4">
             <EventLog events={events} />
           </section>
+          {layout === "waveform" && (
+            <section className="h-24 px-4 flex flex-col gap-2">
+              <div className="h-[50px]">
+                <Waveform 
+                  color="rgba(255, 134, 71, 1)"
+                  darkColor="rgba(255, 134, 71, 0.6)"
+                  label="Assistant"
+                  analyserNode={assistantAnalyser.current}
+                />
+              </div>
+              <div className="h-[50px]">
+                <Waveform
+                  color="rgba(255, 64, 19, 1)"
+                  darkColor="rgba(255, 64, 19, 0.6)"
+                  label="User"
+                  analyserNode={userAnalyser.current}
+                />
+              </div>
+            </section>
+          )}
           <section className="h-32 p-4">
             <SessionControls
               startSession={startSession}
