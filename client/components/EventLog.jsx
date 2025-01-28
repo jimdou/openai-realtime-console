@@ -1,5 +1,5 @@
 import { ArrowUp, ArrowDown } from "react-feather";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function Event({ event, timestamp }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -36,6 +36,13 @@ function Event({ event, timestamp }) {
 export default function EventLog({ events }) {
   const eventsToDisplay = [];
   let deltaEvents = {};
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [events]);
 
   events.forEach((event) => {
     if (event.type.endsWith("delta")) {
@@ -57,7 +64,7 @@ export default function EventLog({ events }) {
   });
 
   return (
-    <div className="flex flex-col gap-2 overflow-x-auto">
+    <div ref={scrollRef} className="flex flex-col gap-2 overflow-y-auto h-full">
       {events.length === 0 ? (
         <div className="text-white">Awaiting events...</div>
       ) : (
