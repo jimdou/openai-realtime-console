@@ -569,7 +569,7 @@ export default function App() {
         {(layout === "smart" && isSessionActive) && (
           <section className="flex-1">
             <div className="flex flex-col gap-2">
-              <div className="h-[100px]">
+              <div className="h-[50px]">
                 <Waveform 
                   color="rgba(255, 134, 71, 1)"
                   darkColor="rgba(255, 134, 71, 0.6)"
@@ -577,7 +577,7 @@ export default function App() {
                   analyserNode={assistantAnalyser.current}
                 />
               </div>
-              <div className="h-[100px]">
+              <div className="h-[50px]">
                 <Waveform
                   color="rgba(255, 64, 19, 1)"
                   darkColor="rgba(255, 64, 19, 0.6)"
