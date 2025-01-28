@@ -568,23 +568,15 @@ export default function App() {
       <div className="flex gap-4 items-center">
         {(layout === "smart" && isSessionActive) && (
           <section className="flex-1">
-            <div className="flex flex-col gap-2">
-              <div className="h-[50px]">
-                <Waveform 
-                  color="rgba(255, 134, 71, 1)"
-                  darkColor="rgba(255, 134, 71, 0.6)"
-                  label="Assistant"
-                  analyserNode={assistantAnalyser.current}
-                />
-              </div>
-              <div className="h-[50px]">
-                <Waveform
-                  color="rgba(255, 64, 19, 1)"
-                  darkColor="rgba(255, 64, 19, 0.6)"
-                  label="User"
-                  analyserNode={userAnalyser.current}
-                />
-              </div>
+            <div className="h-[50px]">
+              <Waveform 
+                color1="rgba(255, 134, 71, 1)"
+                color2="rgba(255, 64, 19, 1)"
+                label1="Assistant"
+                label2="User"
+                analyserNode1={assistantAnalyser.current}
+                analyserNode2={userAnalyser.current}
+              />
             </div>
           </section>
         )}
@@ -668,21 +660,15 @@ export default function App() {
             <EventLog events={events} />
           </section>
           {layout === "waveform" && (
-            <section className="h-24 px-4 flex flex-col gap-2">
+            <section className="h-24 px-4">
               <div className="h-[50px]">
                 <Waveform 
-                  color="rgba(255, 134, 71, 1)"
-                  darkColor="rgba(255, 134, 71, 0.6)"
-                  label="Assistant"
-                  analyserNode={assistantAnalyser.current}
-                />
-              </div>
-              <div className="h-[50px]">
-                <Waveform
-                  color="rgba(255, 64, 19, 1)"
-                  darkColor="rgba(255, 64, 19, 0.6)"
-                  label="User"
-                  analyserNode={userAnalyser.current}
+                  color1="rgba(255, 134, 71, 1)"
+                  color2="rgba(255, 64, 19, 1)"
+                  label1="Assistant"
+                  label2="User"
+                  analyserNode1={assistantAnalyser.current}
+                  analyserNode2={userAnalyser.current}
                 />
               </div>
             </section>
