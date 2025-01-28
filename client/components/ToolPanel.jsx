@@ -74,6 +74,7 @@ export default function ToolPanel({
   systemMessage,
   setSystemMessage,
   updateSystemMessage,
+  onVoiceChange,
 }) {
   const [functionAdded, setFunctionAdded] = useState(false);
   const [functionCallOutput, setFunctionCallOutput] = useState(null);
@@ -124,6 +125,25 @@ export default function ToolPanel({
   return (
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full rounded-md p-4">
+
+
+        <div className="mb-4">
+          <label htmlFor="voiceSelect" className="block text-sm font-medium mb-1">Sélectionnez une voix</label>
+          <select
+            id="voiceSelect"
+            className="w-full p-2 border rounded-md bg-white text-black"
+            onChange={(e) => onVoiceChange(e.target.value)}
+            defaultValue="ash"
+          >
+            {['alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', 'verse'].map((voice) => (
+              <option key={voice} value={voice}>
+                {voice.charAt(0).toUpperCase() + voice.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+
         <h2 className="text-lg font-bold">Instructions</h2>
         <form onSubmit={(e) => {
           e.preventDefault();
