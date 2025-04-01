@@ -516,14 +516,12 @@ export default function App() {
 
   const fetchRoomData = async (room_id) => {
     console.log("Fetching room data for room ID:", room_id);
-    console.log("URL:", `https://api.phonevoice.ai/rooms/${room_id}.json`);
     try {
       const token = process.env.PHONEVOICE_API_TOKEN;
-      const response = await fetch(`https://api.phonevoice.ai/rooms/${room_id}.json`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const url = `https://api.phonevoice.ai/rooms/${room_id}.json?user_token=${token}`;
+      console.log("fetchRoomData URL :", url);
+
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Unable to fetch room data.');
       }
