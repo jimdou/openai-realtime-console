@@ -517,7 +517,7 @@ export default function App() {
   const fetchRoomData = async (room_id) => {
     console.log("Fetching room data for room ID:", room_id);
     try {
-      const token = process.env.PHONEVOICE_API_TOKEN;
+      const token = import.meta.env.VITE_PHONEVOICE_API_TOKEN;
       const url = `https://api.phonevoice.ai/rooms/${room_id}.json?user_token=${token}`;
       console.log("fetchRoomData URL :", url);
 
