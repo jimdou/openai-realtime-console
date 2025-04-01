@@ -517,16 +517,19 @@ export default function App() {
   const fetchRoomData = async (room_id) => {
     console.log("Fetching room data for room ID:", room_id);
     try {
-      const token = import.meta.env.VITE_PHONEVOICE_API_TOKEN;
-      const url = `https://api.phonevoice.ai/rooms/${room_id}.json?user_token=${token}`;
-      console.log("fetchRoomData URL :", url);
-
-      const response = await fetch(url);
+      const TOKEN = "hxekuFTUPfbc4Gjd86js2Nru4PLYzMrTFtz2";
+      const url = `https://api.phonevoice.ai/rooms/${room_id}.json`;
+      console.log("fetchRoomData URL:", url);
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${TOKEN}`
+        }
+      });
       if (!response.ok) {
         throw new Error('Unable to fetch room data.');
       }
       const data = await response.json();
-      console.log("Room data:", data);
+      console.log("fetchRoomData data:", data);
       setSystemMessage(data.system_message);
       setRoomName(data.name); // Ajout du nom de la Room à l'état
       setRoomId(room_id);
