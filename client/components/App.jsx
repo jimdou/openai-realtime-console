@@ -21,7 +21,7 @@ export default function App() {
   const [isRoomLoaded, setIsRoomLoaded] = useState(false);
   const [hasRoomError, setHasRoomError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
-  const [selectedVoice, setSelectedVoice] = useState('ash');
+  const [selectedVoice, setSelectedVoice] = useState('cedar');
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
   const [assistantAudioStream, setAssistantAudioStream] = useState(null);

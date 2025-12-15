@@ -131,9 +131,9 @@ export default function ToolPanel({
             id="voiceSelect"
             className="w-full p-2 border rounded-md bg-white text-black"
             onChange={(e) => onVoiceChange(e.target.value)}
-            defaultValue="ash"
+            defaultValue="cedar"
           >
-            {['alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', 'verse'].map((voice) => (
+            {['cedar', 'marin', 'alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', 'verse'].map((voice) => (
               <option key={voice} value={voice}>
                 {voice.charAt(0).toUpperCase() + voice.slice(1)}
               </option>
