@@ -17,34 +17,22 @@ export default function App() {
   const [assistantName, setAssistantName] = useState('');
   const [assistantId, setAssistantId] = useState('');
   const [layout, setLayout] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('layout') || 'button';
-    }
-    return 'button';
+    const params = new URLSearchParams(window.location.search);
+    return params.get('layout') || 'button';
   });
   const [isLayoutLoaded, setIsLayoutLoaded] = useState(true);
   const [isAssistantLoaded, setIsAssistantLoaded] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return !params.get('assistant_id'); // Loaded if no ID to fetch
-    }
-    return true; // Default to loaded Server side
+    const params = new URLSearchParams(window.location.search);
+    return !params.get('assistant_id'); // Loaded if no ID to fetch
   });
   const [locale, setLocale] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('locale') || 'en';
-    }
-    return 'en';
+    const params = new URLSearchParams(window.location.search);
+    return params.get('locale') || 'en';
   });
   const [enablePulse, setEnablePulse] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const pulse = params.get('pulse');
-      return pulse === 'true' || pulse === '1';
-    }
-    return false;
+    const params = new URLSearchParams(window.location.search);
+    const pulse = params.get('pulse');
+    return pulse === 'true' || pulse === '1';
   });
   const [hasAssistantError, setHasAssistantError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
