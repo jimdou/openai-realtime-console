@@ -29,6 +29,11 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     return params.get('locale') || 'en';
   });
+  const [enablePulse, setEnablePulse] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const pulse = params.get('pulse');
+    return pulse === 'true' || pulse === '1';
+  });
   const [hasAssistantError, setHasAssistantError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
   const [selectedVoice, setSelectedVoice] = useState('cedar');
@@ -520,6 +525,9 @@ export default function App() {
     const assistant_id = params.get('assistant_id');
     const localeParam = params.get('locale');
     if (localeParam) setLocale(localeParam);
+    
+    const pulseParam = params.get('pulse');
+    if (pulseParam === 'true' || pulseParam === '1') setEnablePulse(true);
 
     setAssistantId(assistant_id);
     if (assistant_id) {
@@ -611,6 +619,7 @@ export default function App() {
             isSessionActive={isSessionActive}
             layout={layout}
             locale={locale}
+            enablePulse={enablePulse}
           />
         </section>
       </div>

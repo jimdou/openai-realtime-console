@@ -19,9 +19,11 @@ const translations = {
   }
 };
 
-function SessionStopped({ startSession, locale = 'en' }) {
+function SessionStopped({ startSession, locale = 'en', enablePulse = false }) {
   const [isActivating, setIsActivating] = useState(false);
   const t = translations[locale] || translations.en;
+  
+  const breatheClass = enablePulse ? "animate-breathe" : "";
 
   function handleStartSession() {
     if (isActivating) return;
@@ -35,7 +37,7 @@ function SessionStopped({ startSession, locale = 'en' }) {
       <div className="flex flex-col gap-2">
         <Button
           onClick={handleStartSession}
-          className={isActivating ? "bg-gray-600" : "bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold font-sans shadow-[0_0_20px_rgba(236,72,153,0.5)] animate-breathe hover:animate-none hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:scale-105 transition-all duration-300 border border-white/20"}
+          className={isActivating ? "bg-gray-600" : `bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold font-sans shadow-[0_0_20px_rgba(236,72,153,0.5)] ${breatheClass} hover:animate-none hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:scale-105 transition-all duration-300 border border-white/20`}
           icon={<CloudLightning height={16} />}
         >
           {isActivating ? t.starting : t.start}
@@ -104,7 +106,8 @@ export default function SessionControls({
   serverEvents,
   isSessionActive,
   layout,
-  locale
+  locale,
+  enablePulse
 }) {
   return (
     <div className={layout !== "button" ? "flex gap-4 border-gray-200 h-full rounded-md bg-dark-2" : ""}>
@@ -118,7 +121,7 @@ export default function SessionControls({
           locale={locale}
         />
       ) : (
-        <SessionStopped startSession={startSession} locale={locale} />
+        <SessionStopped startSession={startSession} locale={locale} enablePulse={enablePulse} />
       )}
     </div>
   );
