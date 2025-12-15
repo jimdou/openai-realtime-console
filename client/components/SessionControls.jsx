@@ -17,7 +17,7 @@ function SessionStopped({ startSession }) {
       <div className="flex flex-col gap-2">
         <Button
           onClick={handleStartSession}
-          className={isActivating ? "bg-gray-600" : "bg-red-600"}
+          className={isActivating ? "bg-gray-600" : "bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold font-sans shadow-[0_0_20px_rgba(236,72,153,0.5)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:scale-105 transition-all duration-300 border border-white/20"}
           icon={<CloudLightning height={16} />}
         >
           {isActivating ? "Starting session..." : "Speak with assistant"}
