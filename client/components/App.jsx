@@ -16,9 +16,15 @@ export default function App() {
   const [dataChannel, setDataChannel] = useState(null);
   const [assistantName, setAssistantName] = useState('');
   const [assistantId, setAssistantId] = useState('');
-  const [layout, setLayout] = useState('button');
-  const [isLayoutLoaded, setIsLayoutLoaded] = useState(false);
-  const [isAssistantLoaded, setIsAssistantLoaded] = useState(false);
+  const [layout, setLayout] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('layout') || 'button';
+  });
+  const [isLayoutLoaded, setIsLayoutLoaded] = useState(true);
+  const [isAssistantLoaded, setIsAssistantLoaded] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return !params.get('assistant_id'); // Loaded if no ID to fetch
+  });
   const [hasAssistantError, setHasAssistantError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
   const [selectedVoice, setSelectedVoice] = useState('cedar');
@@ -495,14 +501,15 @@ export default function App() {
     console.log('User audio stream changed:', userAudioStream);
   }, [userAudioStream]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const layoutParam = params.get('layout');
-    if (layoutParam) {
-      setLayout(layoutParam);
-    }
-    setIsLayoutLoaded(true);
-  }, []);
+  // Layout is loaded synchronously
+  // useEffect(() => {
+  //   const params = new URLSearchParams(window.location.search);
+  //   const layoutParam = params.get('layout');
+  //   if (layoutParam) {
+  //     setLayout(layoutParam);
+  //   }
+  //   setIsLayoutLoaded(true);
+  // }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -510,8 +517,6 @@ export default function App() {
     setAssistantId(assistant_id);
     if (assistant_id) {
       fetchAssistantData(assistant_id);
-    } else {
-      setIsAssistantLoaded(true);
     }
   }, []);
 
@@ -573,7 +578,7 @@ export default function App() {
 
   if (layout === "button" || layout === "smart") {
     return (
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center justify-center h-screen w-screen">
         {(layout === "smart" && isSessionActive) && (
           <section className="flex-1">
             <div className="h-[50px]">
@@ -588,7 +593,7 @@ export default function App() {
             </div>
           </section>
         )}
-        {!isSessionActive && <div className="flex-1" />}
+        {(!isSessionActive && layout !== "button" && layout !== "smart") && <div className="flex-1" />}
         <section>
           <SessionControls
             startSession={startSession}
