@@ -37,3 +37,18 @@ body {
 .bg-dark-1 { background-color: var(--color-base-1) !important; }
 .bg-dark-2 { background-color: var(--color-base-2) !important; }
 .bg-dark-3 { background-color: var(--color-base-3) !important; }
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 35px rgba(236, 72, 153, 0.7);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
