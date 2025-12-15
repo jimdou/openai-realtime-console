@@ -583,8 +583,8 @@ export default function App() {
           <section className="w-full max-w-[300px]">
             <div className="h-[80px]">
               <Waveform 
-                color1="rgba(255, 134, 71, 1)"
-                color2="rgba(255, 64, 19, 1)"
+                color1="#06B6D4" // Cyan
+                color2="#F472B6" // Pink
                 label1="Assistant"
                 label2="User"
                 analyserNode1={assistantAnalyser.current}
