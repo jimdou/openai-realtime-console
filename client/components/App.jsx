@@ -14,12 +14,12 @@ export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
-  const [roomName, setRoomName] = useState('');
-  const [roomId, setRoomId] = useState('');
+  const [assistantName, setAssistantName] = useState('');
+  const [assistantId, setAssistantId] = useState('');
   const [layout, setLayout] = useState('button');
   const [isLayoutLoaded, setIsLayoutLoaded] = useState(false);
-  const [isRoomLoaded, setIsRoomLoaded] = useState(false);
-  const [hasRoomError, setHasRoomError] = useState(false);
+  const [isAssistantLoaded, setIsAssistantLoaded] = useState(false);
+  const [hasAssistantError, setHasAssistantError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
   const [selectedVoice, setSelectedVoice] = useState('cedar');
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -506,41 +506,41 @@ export default function App() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const room_id = params.get('room_id');
-    setRoomId(room_id);
-    if (room_id) {
-      fetchRoomData(room_id);
+    const assistant_id = params.get('assistant_id');
+    setAssistantId(assistant_id);
+    if (assistant_id) {
+      fetchAssistantData(assistant_id);
     } else {
-      setIsRoomLoaded(true);
+      setIsAssistantLoaded(true);
     }
   }, []);
 
-  const fetchRoomData = async (room_id) => {
-    console.log("Fetching room data for room ID:", room_id);
+  const fetchAssistantData = async (assistant_id) => {
+    console.log("Fetching assistant data for assistant ID:", assistant_id);
     try {
       const TOKEN = "hxekuFTUPfbc4Gjd86js2Nru4PLYzMrTFtz2";
-      const url = `https://api.phonevoice.ai/rooms/${room_id}.json`;
-      console.log("fetchRoomData URL:", url);
+      const url = `https://api.phonevoice.ai/assistants/${assistant_id}.json`;
+      console.log("fetchAssistantData URL:", url);
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${TOKEN}`
         }
       });
       if (!response.ok) {
-        throw new Error('Unable to fetch room data.');
+        throw new Error('Unable to fetch assistant data.');
       }
       const data = await response.json();
-      console.log("fetchRoomData data:", data);
+      console.log("fetchAssistantData data:", data);
       setSystemMessage(data.system_message);
-      setRoomName(data.name); // Ajout du nom de la Room à l'état
-      setRoomId(room_id);
+      setAssistantName(data.name); // Ajout du nom de l'Assistant à l'état
+      setAssistantId(assistant_id);
       setFirstMessage(data.first_message || '');
-      setHasRoomError(false);
+      setHasAssistantError(false);
     } catch (error) {
-      console.error('Error fetching room data:', error);
-      setHasRoomError(true);
+      console.error('Error fetching assistant data:', error);
+      setHasAssistantError(true);
     }
-    setIsRoomLoaded(true);
+    setIsAssistantLoaded(true);
   };
 
   const LoadingScreen = () => (
@@ -554,11 +554,11 @@ export default function App() {
     </div>
   );
 
-  if (!isLayoutLoaded || !isRoomLoaded) {
+  if (!isLayoutLoaded || !isAssistantLoaded) {
     return <LoadingScreen />;
   }
 
-  if (hasRoomError && roomId) {
+  if (hasAssistantError && assistantId) {
     return (
       <div style={{ 
         display: 'flex', 
@@ -566,7 +566,7 @@ export default function App() {
         alignItems: 'center', 
         height: '100vh' 
       }}>
-        Unable to load room data.
+        Unable to load assistant data.
       </div>
     );
   }
@@ -653,10 +653,10 @@ export default function App() {
           <img style={{ width: "24px" }} src={logo} />
           <h1>
             PhoneVoice - Realtime console
-            {roomName && ` - `}
-            {roomName && (
-              <a href={`https://phonevoice.ai/rooms/${roomId}`} className="text-blue-500 underline" target="_blank">
-                {roomName}
+            {assistantName && ` - `}
+            {assistantName && (
+              <a href={`https://phonevoice.ai/assistants/${assistantId}`} className="text-blue-500 underline" target="_blank">
+                {assistantName}
               </a>
             )}
           </h1>
