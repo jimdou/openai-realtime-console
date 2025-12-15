@@ -25,6 +25,10 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     return !params.get('assistant_id'); // Loaded if no ID to fetch
   });
+  const [locale, setLocale] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('locale') || 'en';
+  });
   const [hasAssistantError, setHasAssistantError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
   const [selectedVoice, setSelectedVoice] = useState('cedar');
@@ -514,6 +518,9 @@ export default function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const assistant_id = params.get('assistant_id');
+    const localeParam = params.get('locale');
+    if (localeParam) setLocale(localeParam);
+
     setAssistantId(assistant_id);
     if (assistant_id) {
       fetchAssistantData(assistant_id);
@@ -603,6 +610,7 @@ export default function App() {
             events={events}
             isSessionActive={isSessionActive}
             layout={layout}
+            locale={locale}
           />
         </section>
       </div>
