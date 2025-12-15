@@ -65,7 +65,11 @@ function SessionActive({ stopSession, sendTextMessage, layout }) {
         </>
       )}
       <div className="flex flex-col gap-2">
-        <Button onClick={stopSession} icon={<CloudOff height={16} />}>
+        <Button 
+          onClick={stopSession} 
+          icon={<CloudOff height={16} />}
+          className="bg-gray-700 hover:bg-red-500/80 text-white transition-all duration-300 hover:shadow-[0_0_15px_rgba(239,68,68,0.5)] border border-white/10"
+        >
           Disconnect
         </Button>
       </div>
