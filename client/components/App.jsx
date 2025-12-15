@@ -235,7 +235,8 @@ export default function App() {
     await pc.setLocalDescription(offer);
 
     const baseUrl = "https://api.openai.com/v1/realtime";
-    const model = "gpt-4o-realtime-preview-2024-12-17";
+    // const model = "gpt-4o-realtime-preview-2024-12-17";
+    const model = "gpt-realtime";
     const voice = selectedVoice;
     // Supported values are: 'alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', and 'verse'.
 
