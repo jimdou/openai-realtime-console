@@ -578,10 +578,10 @@ export default function App() {
 
   if (layout === "button" || layout === "smart") {
     return (
-      <div className="flex gap-4 items-center justify-center h-screen w-screen">
+      <div className={`flex gap-4 items-center justify-center h-screen w-screen ${layout === "smart" ? "flex-col p-8" : ""}`}>
         {(layout === "smart" && isSessionActive) && (
-          <section className="flex-1">
-            <div className="h-[50px]">
+          <section className="w-full max-w-[300px]">
+            <div className="h-[80px]">
               <Waveform 
                 color1="rgba(255, 134, 71, 1)"
                 color2="rgba(255, 64, 19, 1)"
