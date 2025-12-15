@@ -44,11 +44,11 @@ body {
     box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
   }
   50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 35px rgba(236, 72, 153, 0.7);
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(236, 72, 153, 0.8);
   }
 }
 
 .animate-breathe {
-  animation: breathe 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: breathe 2s ease-in-out infinite;
 }
