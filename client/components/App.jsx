@@ -578,9 +578,9 @@ export default function App() {
 
   if (layout === "button" || layout === "smart") {
     return (
-      <div className={`flex gap-4 items-center justify-center h-screen w-screen ${layout === "smart" ? "flex-col p-8" : ""}`}>
+      <div className={`flex gap-4 items-center justify-center h-screen w-screen ${layout === "smart" ? "flex-col p-2" : ""}`}>
         {(layout === "smart" && isSessionActive) && (
-          <section className="w-full max-w-[320px]">
+          <section className="w-full max-w-[350px]">
             <div className="h-[250px]">
               <Waveform 
                 color1="#F472B6" // Pink (PhoneVoice)
