@@ -550,7 +550,7 @@ export default function App() {
   const fetchAssistantData = async (assistant_id) => {
     console.log("Fetching assistant data for assistant ID:", assistant_id);
     try {
-      const TOKEN = "hxekuFTUPfbc4Gjd86js2Nru4PLYzMrTFtz2";
+      const TOKEN = "Brh5TQKdPqx7u45XDnSiuwrZh78eGqniD29m";
       const url = `https://api.phonevoice.ai/assistants/${assistant_id}.json`;
       console.log("fetchAssistantData URL:", url);
       const response = await fetch(url, {
