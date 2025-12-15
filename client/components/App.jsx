@@ -580,8 +580,8 @@ export default function App() {
     return (
       <div className={`flex gap-4 items-center justify-center h-screen w-screen ${layout === "smart" ? "flex-col p-8" : ""}`}>
         {(layout === "smart" && isSessionActive) && (
-          <section className="w-full max-w-[300px]">
-            <div className="h-[80px]">
+          <section className="w-full max-w-[320px]">
+            <div className="h-[250px]">
               <Waveform 
                 color1="#F472B6" // Pink (PhoneVoice)
                 color2="#06B6D4" // Cyan (User)

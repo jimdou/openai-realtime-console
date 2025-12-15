@@ -143,7 +143,7 @@ const Waveform = ({ color1, color2, label1, label2, analyserNode1, analyserNode2
         ref={canvasRef}
         className="w-full h-full"
         width={500}
-        height={100}
+        height={300}
       />
       {/* <div className="absolute top-2 left-2 text-sm font-medium text-gray-500">
         {label1}
