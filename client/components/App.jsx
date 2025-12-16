@@ -293,47 +293,6 @@ export default function App() {
 
   }
 
-  // Stop current session, clean up peer connection and data channel
-  const stopSession = async () => {
-    // Nettoyer l'intervalle
-    if (checkAudioInterval.current) {
-      clearInterval(checkAudioInterval.current);
-      checkAudioInterval.current = null;
-    }
-
-    if (peerConnection.current) {
-      peerConnection.current.close();
-      peerConnection.current = null;
-    }
-
-    if (dataChannel) {
-      dataChannel.close();
-    }
-
-    // Nettoyer l'audio
-    if (audioElement.current) {
-      audioElement.current.pause();
-      audioElement.current.srcObject = null;
-      audioElement.current = null;
-    }
-
-    if (audioContext.current) {
-      await audioContext.current.close();
-      audioContext.current = null;
-    }
-
-    // Réinitialiser les analyseurs
-    userAnalyser.current = null;
-    assistantAnalyser.current = null;
-    audioDataArray.current = null;
-
-    setIsSessionActive(false);
-    setEvents([]);
-    setIsSpeaking(false);
-    setIsUserSpeaking(false);
-    setAssistantAudioStream(null);
-    setUserAudioStream(null);
-  };
 
   // Send a message to the model
   function sendClientEvent(message) {
@@ -547,6 +506,15 @@ export default function App() {
   const [valign, setValign] = useState('middle');
   const [glow, setGlow] = useState(false);
 
+  const [isAutoplay, setIsAutoplay] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const autoplay = params.get('autoplay');
+      return autoplay === '1' || autoplay === 'true';
+    }
+    return false;
+  });
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const assistant_id = params.get('assistant_id');
@@ -612,14 +580,57 @@ export default function App() {
   // Autoplay effect
   useEffect(() => {
     if (isAssistantLoaded && !isSessionActive && !hasAssistantError) {
-      const params = new URLSearchParams(window.location.search);
-      const autoplayParam = params.get('autoplay');
-      if (autoplayParam === '1' || autoplayParam === 'true') {
+      if (isAutoplay) {
         console.log("Autoplay enabled, starting session...");
         startSession();
       }
     }
-  }, [isAssistantLoaded, hasAssistantError]);
+  }, [isAssistantLoaded, hasAssistantError, isAutoplay]);
+
+  // Stop current session, clean up peer connection and data channel
+  const stopSession = async () => {
+    // Disable autoplay to allow manual restart
+    setIsAutoplay(false);
+
+    // Nettoyer l'intervalle
+    if (checkAudioInterval.current) {
+      clearInterval(checkAudioInterval.current);
+      checkAudioInterval.current = null;
+    }
+
+    if (peerConnection.current) {
+      peerConnection.current.close();
+      peerConnection.current = null;
+    }
+
+    if (dataChannel) {
+      dataChannel.close();
+    }
+
+    // Nettoyer l'audio
+    if (audioElement.current) {
+      audioElement.current.pause();
+      audioElement.current.srcObject = null;
+      audioElement.current = null;
+    }
+
+    if (audioContext.current) {
+      await audioContext.current.close();
+      audioContext.current = null;
+    }
+
+    // Réinitialiser les analyseurs
+    userAnalyser.current = null;
+    assistantAnalyser.current = null;
+    audioDataArray.current = null;
+
+    setIsSessionActive(false);
+    setEvents([]);
+    setIsSpeaking(false);
+    setIsUserSpeaking(false);
+    setAssistantAudioStream(null);
+    setUserAudioStream(null);
+  };
 
   const LoadingScreen = () => (
     <div style={{ 
@@ -633,7 +644,7 @@ export default function App() {
     </div>
   );
 
-  if (!isLayoutLoaded || !isAssistantLoaded) {
+  if (!isLayoutLoaded || !isAssistantLoaded || (isAutoplay && !isSessionActive)) {
     return <LoadingScreen />;
   }
 
