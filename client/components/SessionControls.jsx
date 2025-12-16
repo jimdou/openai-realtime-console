@@ -19,7 +19,7 @@ const translations = {
   }
 };
 
-function SessionStopped({ startSession, locale = 'en', enablePulse = false }) {
+function SessionStopped({ startSession, locale = 'en', enablePulse = false, align = 'center' }) {
   const [isActivating, setIsActivating] = useState(false);
   const t = translations[locale] || translations.en;
   
@@ -32,8 +32,10 @@ function SessionStopped({ startSession, locale = 'en', enablePulse = false }) {
     startSession();
   }
 
+  const justifyClass = align === 'left' ? 'justify-start' : align === 'right' ? 'justify-end' : 'justify-center';
+
   return (
-    <div className="flex items-center justify-center w-full h-full">
+    <div className={`flex items-center ${justifyClass} w-full h-full`}>
       <div className="flex flex-col gap-2">
         <Button
           onClick={handleStartSession}
@@ -107,10 +109,11 @@ export default function SessionControls({
   isSessionActive,
   layout,
   locale,
-  enablePulse
+  enablePulse,
+  align
 }) {
   return (
-    <div className={layout !== "button" ? "flex gap-4 border-gray-200 h-full rounded-md bg-dark-2" : ""}>
+    <div className={layout !== "button" && layout !== "smart" ? "flex gap-4 border-gray-200 h-full rounded-md bg-dark-2" : ""}>
       {isSessionActive ? (
         <SessionActive
           stopSession={stopSession}
@@ -121,7 +124,7 @@ export default function SessionControls({
           locale={locale}
         />
       ) : (
-        <SessionStopped startSession={startSession} locale={locale} enablePulse={enablePulse} />
+        <SessionStopped startSession={startSession} locale={locale} enablePulse={enablePulse} align={align} />
       )}
     </div>
   );

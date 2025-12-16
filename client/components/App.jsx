@@ -532,6 +532,11 @@ export default function App() {
   //   setIsLayoutLoaded(true);
   // }, []);
 
+  const [bgColor, setBgColor] = useState(null);
+  const [orientation, setOrientation] = useState('vertical');
+  const [waveformHeight, setWaveformHeight] = useState('250');
+  const [align, setAlign] = useState('center');
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const assistant_id = params.get('assistant_id');
@@ -540,6 +545,19 @@ export default function App() {
     
     const pulseParam = params.get('pulse');
     if (pulseParam === 'true' || pulseParam === '1') setEnablePulse(true);
+
+    // New params
+    const bgParam = params.get('bg');
+    if (bgParam) setBgColor(bgParam);
+
+    const orientationParam = params.get('orientation');
+    if (orientationParam) setOrientation(orientationParam);
+
+    const heightParam = params.get('height');
+    if (heightParam) setWaveformHeight(heightParam);
+
+    const alignParam = params.get('align');
+    if (alignParam) setAlign(alignParam);
 
     setAssistantId(assistant_id);
     if (assistant_id) {
@@ -580,7 +598,8 @@ export default function App() {
       display: 'flex', 
       justifyContent: 'center', 
       alignItems: 'center', 
-      height: '100vh' 
+      height: '100vh',
+      backgroundColor: bgColor ? `#${bgColor}` : undefined
     }}>
       Loading...
     </div>
@@ -596,7 +615,8 @@ export default function App() {
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'center', 
-        height: '100vh' 
+        height: '100vh',
+        backgroundColor: bgColor ? `#${bgColor}` : undefined
       }}>
         Unable to load assistant data.
       </div>
@@ -604,11 +624,21 @@ export default function App() {
   }
 
   if (layout === "button" || layout === "smart") {
+    const isVertical = orientation === 'vertical';
+    const flexDirection = isVertical ? 'flex-col-reverse' : 'flex-row';
+    // If vertical (waveform under controls), we use flex-col-reverse because Waveform is DOM-first.
+    // DOM: [Waveform, Controls]
+    // flex-col-reverse: Controls (top), Waveform (bottom) -> Correct.
+    // flex-row: Waveform (left), Controls (right) -> Correct.
+
     return (
-      <div className={`flex gap-4 items-center justify-center h-screen w-screen ${layout === "smart" ? "flex-col p-2" : ""}`}>
+      <div 
+        className={`flex gap-4 items-center justify-center h-screen w-screen ${layout === "smart" ? `${flexDirection} p-2` : ""}`}
+        style={{ backgroundColor: bgColor ? `#${bgColor}` : undefined }}
+      >
         {(layout === "smart" && isSessionActive) && (
           <section className="w-full max-w-[350px]">
-            <div className="h-[250px]">
+            <div style={{ height: `${waveformHeight}px` }}>
               <Waveform 
                 color1="#F472B6" // Pink (PhoneVoice)
                 color2="#06B6D4" // Cyan (User)
@@ -621,7 +651,7 @@ export default function App() {
           </section>
         )}
         {(!isSessionActive && layout !== "button" && layout !== "smart") && <div className="flex-1" />}
-        <section>
+        <section className="w-full">
           <SessionControls
             startSession={startSession}
             stopSession={stopSession}
@@ -632,6 +662,7 @@ export default function App() {
             layout={layout}
             locale={locale}
             enablePulse={enablePulse}
+            align={align}
           />
         </section>
       </div>
