@@ -606,7 +606,6 @@ export default function App() {
       console.error('Error fetching assistant data:', error);
       setHasAssistantError(true);
     }
-    }
     setIsAssistantLoaded(true);
   };
 
