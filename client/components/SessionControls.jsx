@@ -19,6 +19,8 @@ const translations = {
   }
 };
 
+import { Headphones } from "react-feather";
+
 function SessionStopped({ startSession, locale = 'en', enablePulse = false, align = 'center', glow = false }) {
   const [isActivating, setIsActivating] = useState(false);
   const t = translations[locale] || translations.en;
@@ -40,14 +42,21 @@ function SessionStopped({ startSession, locale = 'en', enablePulse = false, alig
 
   return (
     <div className={`flex items-center ${justifyClass} w-full h-full`}>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-center gap-4">
         <Button
           onClick={handleStartSession}
-          className={isActivating ? "bg-gray-600" : `bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold font-sans ${glowClasses} hover:scale-105 transition-all duration-300 border border-white/20`}
-          icon={<CloudLightning height={16} />}
+          className={
+            isActivating 
+              ? "bg-gray-600 w-24 h-24 justify-center rounded-full" 
+              : `bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white w-24 h-24 justify-center rounded-full ${glowClasses} hover:scale-105 transition-all duration-300 border border-white/20`
+          }
+          icon={isActivating ? <CloudLightning height={32} /> : <Headphones height={32} />}
         >
-          {isActivating ? t.starting : t.start}
+          {/* No text inside button */}
         </Button>
+        <div className="text-white font-medium text-lg tracking-wider">
+          {isActivating ? t.starting : t.start}
+        </div>
       </div>
     </div>
   );

@@ -640,7 +640,7 @@ export default function App() {
       height: '100vh',
       backgroundColor: bgColor ? `#${bgColor}` : undefined
     }}>
-      Loading...
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
     </div>
   );
 
