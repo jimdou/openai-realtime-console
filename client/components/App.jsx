@@ -226,6 +226,14 @@ export default function App() {
     // Attendre que le canal soit ouvert pour envoyer le message initial
     dc.onopen = () => {
       console.log("Data channel is open, waiting before sending initial message");
+
+      // Notify parent about interaction start
+      if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+        window.parent.postMessage({
+          type: 'phonevoice:interaction:started',
+          assistantId: assistantId
+        }, '*');
+      }
       
       // Attendre un peu avant d'envoyer les messages
       setTimeout(() => {
