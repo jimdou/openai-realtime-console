@@ -536,6 +536,7 @@ export default function App() {
   const [orientation, setOrientation] = useState('vertical');
   const [waveformHeight, setWaveformHeight] = useState('250');
   const [align, setAlign] = useState('center');
+  const [valign, setValign] = useState('middle');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -558,6 +559,9 @@ export default function App() {
 
     const alignParam = params.get('align');
     if (alignParam) setAlign(alignParam);
+
+    const valignParam = params.get('valign');
+    if (valignParam) setValign(valignParam);
 
     setAssistantId(assistant_id);
     if (assistant_id) {
@@ -626,14 +630,35 @@ export default function App() {
   if (layout === "button" || layout === "smart") {
     const isVertical = orientation === 'vertical';
     const flexDirection = isVertical ? 'flex-col-reverse' : 'flex-row';
-    // If vertical (waveform under controls), we use flex-col-reverse because Waveform is DOM-first.
-    // DOM: [Waveform, Controls]
-    // flex-col-reverse: Controls (top), Waveform (bottom) -> Correct.
-    // flex-row: Waveform (left), Controls (right) -> Correct.
+    
+    // Calculate alignment classes
+    let justifyClass = 'justify-center';
+    let itemsClass = 'items-center';
+
+    if (isVertical) {
+      // Main axis: Vertical (Bottom to Top)
+      // justify-start -> Bottom
+      // justify-end -> Top
+      if (valign === 'top') justifyClass = 'justify-end';
+      else if (valign === 'bottom') justifyClass = 'justify-start';
+      
+      // Cross axis: Horizontal
+      if (align === 'left') itemsClass = 'items-start';
+      else if (align === 'right') itemsClass = 'items-end';
+    } else {
+      // Horizontal mode (flex-row)
+      // Main axis: Horizontal
+      if (align === 'left') justifyClass = 'justify-start';
+      else if (align === 'right') justifyClass = 'justify-end';
+
+      // Cross axis: Vertical
+      if (valign === 'top') itemsClass = 'items-start';
+      else if (valign === 'bottom') itemsClass = 'items-end';
+    }
 
     return (
       <div 
-        className={`flex gap-4 items-center justify-center h-screen w-screen ${layout === "smart" ? `${flexDirection} p-2` : ""}`}
+        className={`flex gap-4 ${itemsClass} ${justifyClass} h-screen w-screen ${layout === "smart" ? `${flexDirection} p-2` : ""}`}
         style={{ backgroundColor: bgColor ? `#${bgColor}` : undefined }}
       >
         {(layout === "smart" && isSessionActive) && (
@@ -662,7 +687,6 @@ export default function App() {
             layout={layout}
             locale={locale}
             enablePulse={enablePulse}
-            align={align}
           />
         </section>
       </div>
