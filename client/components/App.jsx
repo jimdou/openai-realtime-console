@@ -629,7 +629,7 @@ export default function App() {
 
   if (layout === "button" || layout === "smart") {
     const isVertical = orientation === 'vertical';
-    const flexDirection = isVertical ? 'flex-col-reverse' : 'flex-row';
+    const flexDirection = isVertical ? 'flex-col' : 'flex-row';
     
     // Calculate alignment classes
     let justifyClass = 'justify-center';
