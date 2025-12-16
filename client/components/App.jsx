@@ -537,6 +537,7 @@ export default function App() {
   const [waveformHeight, setWaveformHeight] = useState('250');
   const [align, setAlign] = useState('center');
   const [valign, setValign] = useState('middle');
+  const [glow, setGlow] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -562,6 +563,9 @@ export default function App() {
 
     const valignParam = params.get('valign');
     if (valignParam) setValign(valignParam);
+
+    const glowParam = params.get('glow');
+    if (glowParam === 'true' || glowParam === '1') setGlow(true);
 
     setAssistantId(assistant_id);
     if (assistant_id) {
