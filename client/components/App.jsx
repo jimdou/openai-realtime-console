@@ -640,11 +640,11 @@ export default function App() {
     let itemsClass = 'items-center';
 
     if (isVertical) {
-      // Main axis: Vertical (Bottom to Top)
-      // justify-start -> Bottom
-      // justify-end -> Top
-      if (valign === 'top') justifyClass = 'justify-end';
-      else if (valign === 'bottom') justifyClass = 'justify-start';
+      // Main axis: Vertical (Top to Bottom)
+      // justify-start -> Top
+      // justify-end -> Bottom
+      if (valign === 'top') justifyClass = 'justify-start';
+      else if (valign === 'bottom') justifyClass = 'justify-end';
       
       // Cross axis: Horizontal
       if (align === 'left') itemsClass = 'items-start';
