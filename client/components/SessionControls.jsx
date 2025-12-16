@@ -19,7 +19,7 @@ const translations = {
   }
 };
 
-function SessionStopped({ startSession, locale = 'en', enablePulse = false, align = 'center' }) {
+function SessionStopped({ startSession, locale = 'en', enablePulse = false, align = 'center', glow = false }) {
   const [isActivating, setIsActivating] = useState(false);
   const t = translations[locale] || translations.en;
   
@@ -34,12 +34,16 @@ function SessionStopped({ startSession, locale = 'en', enablePulse = false, alig
 
   const justifyClass = align === 'left' ? 'justify-start' : align === 'right' ? 'justify-end' : 'justify-center';
 
+  const glowClasses = glow 
+    ? `shadow-[0_0_20px_rgba(236,72,153,0.5)] ${breatheClass} hover:animate-none hover:shadow-[0_0_30px_rgba(6,182,212,0.6)]`
+    : "";
+
   return (
     <div className={`flex items-center ${justifyClass} w-full h-full`}>
       <div className="flex flex-col gap-2">
         <Button
           onClick={handleStartSession}
-          className={isActivating ? "bg-gray-600" : `bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold font-sans shadow-[0_0_20px_rgba(236,72,153,0.5)] ${breatheClass} hover:animate-none hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:scale-105 transition-all duration-300 border border-white/20`}
+          className={isActivating ? "bg-gray-600" : `bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold font-sans ${glowClasses} hover:scale-105 transition-all duration-300 border border-white/20`}
           icon={<CloudLightning height={16} />}
         >
           {isActivating ? t.starting : t.start}
@@ -110,7 +114,8 @@ export default function SessionControls({
   layout,
   locale,
   enablePulse,
-  align
+  align,
+  glow = false
 }) {
   return (
     <div className={layout !== "button" && layout !== "smart" ? "flex gap-4 border-gray-200 h-full rounded-md bg-dark-2" : ""}>
@@ -124,7 +129,7 @@ export default function SessionControls({
           locale={locale}
         />
       ) : (
-        <SessionStopped startSession={startSession} locale={locale} enablePulse={enablePulse} align={align} />
+        <SessionStopped startSession={startSession} locale={locale} enablePulse={enablePulse} align={align} glow={glow} />
       )}
     </div>
   );
