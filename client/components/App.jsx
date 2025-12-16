@@ -46,13 +46,6 @@ export default function App() {
     }
     return false;
   });
-  const [bgColor, setBgColor] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('bg');
-    }
-    return null;
-  });
   const [hasAssistantError, setHasAssistantError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
   const [selectedVoice, setSelectedVoice] = useState('cedar');
@@ -548,9 +541,6 @@ export default function App() {
     const pulseParam = params.get('pulse');
     if (pulseParam === 'true' || pulseParam === '1') setEnablePulse(true);
 
-    const bgParam = params.get('bg');
-    if (bgParam) setBgColor(bgParam);
-
     setAssistantId(assistant_id);
     if (assistant_id) {
       fetchAssistantData(assistant_id);
@@ -642,7 +632,6 @@ export default function App() {
             layout={layout}
             locale={locale}
             enablePulse={enablePulse}
-            bgColor={bgColor}
           />
         </section>
       </div>
