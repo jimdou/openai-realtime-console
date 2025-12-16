@@ -606,8 +606,21 @@ export default function App() {
       console.error('Error fetching assistant data:', error);
       setHasAssistantError(true);
     }
+    }
     setIsAssistantLoaded(true);
   };
+
+  // Autoplay effect
+  useEffect(() => {
+    if (isAssistantLoaded && !isSessionActive && !hasAssistantError) {
+      const params = new URLSearchParams(window.location.search);
+      const autoplayParam = params.get('autoplay');
+      if (autoplayParam === '1' || autoplayParam === 'true') {
+        console.log("Autoplay enabled, starting session...");
+        startSession();
+      }
+    }
+  }, [isAssistantLoaded, hasAssistantError]);
 
   const LoadingScreen = () => (
     <div style={{ 
