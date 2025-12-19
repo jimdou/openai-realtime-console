@@ -4,14 +4,14 @@ import Button from "./Button";
 
 const translations = {
   en: {
-    start: "Speak with assistant",
+    start: "Speak with agent",
     starting: "Starting session...",
     disconnect: "Disconnect",
     sendTextPlaceholder: "Send a text message...",
     sendTextButton: "Send text"
   },
   fr: {
-    start: "Parler avec l'assistant",
+    start: "Parler avec l'agent",
     starting: "Démarrage...",
     disconnect: "Déconnexion",
     sendTextPlaceholder: "Envoyer un message...",

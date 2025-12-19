@@ -8,14 +8,14 @@ import Waveform from "./Waveform";
 export default function App() {
 
   const [systemMessage, setSystemMessage] = useState(
-    "You are a friendly and helpful assistant. Talk quickly."
+    "You are a friendly and helpful agent. Talk quickly."
   );
 
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
-  const [assistantName, setAssistantName] = useState('');
-  const [assistantId, setAssistantId] = useState('');
+  const [agentName, setAgentName] = useState('');
+  const [agentId, setAgentId] = useState('');
   const [layout, setLayout] = useState(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -24,10 +24,10 @@ export default function App() {
     return 'button';
   });
   const [isLayoutLoaded, setIsLayoutLoaded] = useState(true);
-  const [isAssistantLoaded, setIsAssistantLoaded] = useState(() => {
+  const [isAgentLoaded, setIsAgentLoaded] = useState(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      return !params.get('assistant_id'); // Loaded if no ID to fetch
+      return !params.get('agent_id'); // Loaded if no ID to fetch
     }
     return true; // Default to loaded Server side
   });
@@ -46,18 +46,18 @@ export default function App() {
     }
     return false;
   });
-  const [hasAssistantError, setHasAssistantError] = useState(false);
+  const [hasAgentError, setHasAgentError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
   const [selectedVoice, setSelectedVoice] = useState('cedar');
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
-  const [assistantAudioStream, setAssistantAudioStream] = useState(null);
+  const [agentAudioStream, setAgentAudioStream] = useState(null);
   const [userAudioStream, setUserAudioStream] = useState(null);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
   const audioContext = useRef(null);
   const userAnalyser = useRef(null);
-  const assistantAnalyser = useRef(null);
+  const agentAnalyser = useRef(null);
   const audioDataArray = useRef(null);
   const checkAudioInterval = useRef(null);
 
@@ -110,9 +110,9 @@ export default function App() {
     }, 100);
   };
 
-  // Configurer l'audio de l'assistant
-  const setupAssistantAudio = (stream) => {
-    console.log('Setting up assistant audio...', { stream });
+  // Configurer l'audio de l'agent
+  const setupAgentAudio = (stream) => {
+    console.log('Setting up agent audio...', { stream });
     
     try {
       if (!audioContext.current) {
@@ -120,12 +120,12 @@ export default function App() {
         console.log('Created new audio context');
       }
 
-      // Créer l'analyseur pour l'assistant
-      if (!assistantAnalyser.current) {
-        assistantAnalyser.current = audioContext.current.createAnalyser();
-        assistantAnalyser.current.fftSize = 256;
-        assistantAnalyser.current.smoothingTimeConstant = 0.8;
-        console.log('Created assistant analyser');
+      // Créer l'analyseur pour l'agent
+      if (!agentAnalyser.current) {
+        agentAnalyser.current = audioContext.current.createAnalyser();
+        agentAnalyser.current.fftSize = 256;
+        agentAnalyser.current.smoothingTimeConstant = 0.8;
+        console.log('Created agent analyser');
       }
 
       // Créer l'élément audio pour la lecture
@@ -141,11 +141,11 @@ export default function App() {
       console.log('Created media stream source');
 
       // Connecter uniquement à l'analyseur (pas à la destination)
-      source.connect(assistantAnalyser.current);
+      source.connect(agentAnalyser.current);
       console.log('Connected source to analyser');
 
     } catch (error) {
-      console.error('Error in setupAssistantAudio:', error);
+      console.error('Error in setupAgentAudio:', error);
     }
   };
 
@@ -171,7 +171,7 @@ export default function App() {
 
       // Réinitialiser les analyseurs
       userAnalyser.current = null;
-      assistantAnalyser.current = null;
+      agentAnalyser.current = null;
       audioDataArray.current = null;
     };
   }, []);
@@ -184,19 +184,19 @@ export default function App() {
     const pc = new RTCPeerConnection();
     peerConnection.current = pc;
 
-    // Configurer l'audio de l'assistant
+    // Configurer l'audio de l'agent
     pc.ontrack = (e) => {
-      console.log('Assistant audio stream received:', e.streams[0]);
+      console.log('Agent audio stream received:', e.streams[0]);
       console.log('Stream active:', e.streams[0].active);
       console.log('Audio tracks:', e.streams[0].getAudioTracks());
       
       const stream = e.streams[0];
-      setAssistantAudioStream(stream);
+      setAgentAudioStream(stream);
       
       // Attendre un peu que le stream soit prêt
       setTimeout(() => {
-        console.log('Setting up assistant audio after delay');
-        setupAssistantAudio(stream);
+        console.log('Setting up agent audio after delay');
+        setupAgentAudio(stream);
       }, 100);
     };
 
@@ -231,14 +231,14 @@ export default function App() {
       if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
         window.parent.postMessage({
           type: 'phonevoice:interaction:started',
-          assistantId: assistantId
+          agentId: agentId
         }, '*');
       }
       
       // Attendre un peu avant d'envoyer les messages
       setTimeout(() => {
         console.log("Sending initial messages");
-        // Créer un message initial pour faire parler l'assistant
+        // Créer un message initial pour faire parler l'agent
         const initialMessage = {
           type: "conversation.item.create",
           item: {
@@ -255,7 +255,7 @@ export default function App() {
         // Utiliser directement le canal de données
         dc.send(JSON.stringify(initialMessage));
 
-        // Demander une réponse de l'assistant
+        // Demander une réponse de l'agent
         const responseRequest = {
           type: "response.create"
         };
@@ -371,7 +371,7 @@ export default function App() {
       // Mettre à jour la liste des événements
       setEvents(prev => [...prev, event]);
 
-      // Gérer les événements de parole de l'assistant
+      // Gérer les événements de parole de l'agent
       if (event.type === "output_audio_buffer.audio_started") {
         setIsSpeaking(true);
       } else if (event.type === "output_audio_buffer.audio_stopped") {
@@ -393,12 +393,12 @@ export default function App() {
     const handleEvent = (event) => {
       console.log("Raw event received:", event);
 
-      // Gérer les événements de parole de l'assistant
+      // Gérer les événements de parole de l'agent
       if (event.type === "output_audio_buffer.audio_started") {
-        console.log("Assistant started speaking");
+        console.log("Agent started speaking");
         setIsSpeaking(true);
       } else if (event.type === "output_audio_buffer.audio_stopped") {
-        console.log("Assistant stopped speaking");
+        console.log("Agent stopped speaking");
         setIsSpeaking(false);
       }
 
@@ -457,7 +457,7 @@ export default function App() {
 
   // Effet pour logger les changements d'état de la parole
   useEffect(() => {
-    console.log("Assistant speaking state:", isSpeaking);
+    console.log("Agent speaking state:", isSpeaking);
   }, [isSpeaking]);
 
   useEffect(() => {
@@ -474,7 +474,7 @@ export default function App() {
   }, [dataChannel?.readyState]);
 
   useEffect(() => {
-    console.log('Assistant speaking state changed:', isSpeaking);
+    console.log('Agent speaking state changed:', isSpeaking);
   }, [isSpeaking]);
 
   useEffect(() => {
@@ -482,8 +482,8 @@ export default function App() {
   }, [isUserSpeaking]);
 
   useEffect(() => {
-    console.log('Assistant audio stream changed:', assistantAudioStream);
-  }, [assistantAudioStream]);
+    console.log('Agent audio stream changed:', agentAudioStream);
+  }, [agentAudioStream]);
 
   useEffect(() => {
     console.log('User audio stream changed:', userAudioStream);
@@ -517,7 +517,7 @@ export default function App() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const assistant_id = params.get('assistant_id');
+    const agent_id = params.get('agent_id');
     const localeParam = params.get('locale');
     if (localeParam) setLocale(localeParam);
     
@@ -543,49 +543,49 @@ export default function App() {
     const glowParam = params.get('glow');
     if (glowParam === 'true' || glowParam === '1') setGlow(true);
 
-    setAssistantId(assistant_id);
-    if (assistant_id) {
-      fetchAssistantData(assistant_id);
+    setAgentId(agent_id);
+    if (agent_id) {
+      fetchAgentData(agent_id);
     }
   }, []);
 
-  const fetchAssistantData = async (assistant_id) => {
-    console.log("Fetching assistant data for assistant ID:", assistant_id);
+  const fetchAgentData = async (agent_id) => {
+    console.log("Fetching agent data for agent ID:", agent_id);
     try {
       const TOKEN = "Brh5TQKdPqx7u45XDnSiuwrZh78eGqniD29m";
-      const url = `https://api.phonevoice.ai/assistants/${assistant_id}.json`;
-      console.log("fetchAssistantData URL:", url);
+      const url = `https://api.phonevoice.ai/agents/${agent_id}.json`;
+      console.log("fetchAgentData URL:", url);
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${TOKEN}`
         }
       });
       if (!response.ok) {
-        throw new Error('Unable to fetch assistant data.');
+        throw new Error('Unable to fetch agent data.');
       }
       const data = await response.json();
-      console.log("fetchAssistantData data:", data);
+      console.log("fetchAgentData data:", data);
       setSystemMessage(data.system_message);
-      setAssistantName(data.name); // Ajout du nom de l'Assistant à l'état
-      setAssistantId(assistant_id);
+      setAgentName(data.name); // Ajout du nom de l'Agent à l'état
+      setAgentId(agent_id);
       setFirstMessage(data.first_message || '');
-      setHasAssistantError(false);
+      setHasAgentError(false);
     } catch (error) {
-      console.error('Error fetching assistant data:', error);
-      setHasAssistantError(true);
+      console.error('Error fetching agent data:', error);
+      setHasAgentError(true);
     }
-    setIsAssistantLoaded(true);
+    setIsAgentLoaded(true);
   };
 
   // Autoplay effect
   useEffect(() => {
-    if (isAssistantLoaded && !isSessionActive && !hasAssistantError) {
+    if (isAgentLoaded && !isSessionActive && !hasAgentError) {
       if (isAutoplay) {
         console.log("Autoplay enabled, starting session...");
         startSession();
       }
     }
-  }, [isAssistantLoaded, hasAssistantError, isAutoplay]);
+  }, [isAgentLoaded, hasAgentError, isAutoplay]);
 
   // Stop current session, clean up peer connection and data channel
   const stopSession = async () => {
@@ -621,14 +621,14 @@ export default function App() {
 
     // Réinitialiser les analyseurs
     userAnalyser.current = null;
-    assistantAnalyser.current = null;
+    agentAnalyser.current = null;
     audioDataArray.current = null;
 
     setIsSessionActive(false);
     setEvents([]);
     setIsSpeaking(false);
     setIsUserSpeaking(false);
-    setAssistantAudioStream(null);
+    setAgentAudioStream(null);
     setUserAudioStream(null);
   };
 
@@ -644,11 +644,11 @@ export default function App() {
     </div>
   );
 
-  if (!isLayoutLoaded || !isAssistantLoaded || (isAutoplay && !isSessionActive)) {
+  if (!isLayoutLoaded || !isAgentLoaded || (isAutoplay && !isSessionActive)) {
     return <LoadingScreen />;
   }
 
-  if (hasAssistantError && assistantId) {
+  if (hasAgentError && agentId) {
     return (
       <div style={{ 
         display: 'flex', 
@@ -657,7 +657,7 @@ export default function App() {
         height: '100vh',
         backgroundColor: bgColor ? `#${bgColor}` : undefined
       }}>
-        Unable to load assistant data.
+        Unable to load agent data.
       </div>
     );
   }
@@ -702,9 +702,9 @@ export default function App() {
               <Waveform 
                 color1="#F472B6" // Pink (PhoneVoice)
                 color2="#06B6D4" // Cyan (User)
-                label1="Assistant"
+                label1="Agent"
                 label2="User"
-                analyserNode1={assistantAnalyser.current}
+                analyserNode1={agentAnalyser.current}
                 analyserNode2={userAnalyser.current}
               />
             </div>
@@ -740,8 +740,8 @@ export default function App() {
               <Waveform 
                 color="rgba(255, 134, 71, 1)"
                 darkColor="rgba(255, 134, 71, 0.6)"
-                label="Assistant"
-                analyserNode={assistantAnalyser.current}
+                label="Agent"
+                analyserNode={agentAnalyser.current}
               />
             </div>
             <div className="h-1/2">
@@ -762,7 +762,7 @@ export default function App() {
               events={events}
               isSessionActive={isSessionActive}
               userAnalyser={userAnalyser.current}
-              assistantAnalyser={assistantAnalyser.current}
+              agentAnalyser={agentAnalyser.current}
             />
           </section>
         </main>
@@ -777,10 +777,10 @@ export default function App() {
           <img style={{ width: "24px" }} src={logo} />
           <h1>
             PhoneVoice - Realtime console
-            {assistantName && ` - `}
-            {assistantName && (
-              <a href={`https://phonevoice.ai/assistants/${assistantId}`} className="text-blue-500 underline" target="_blank">
-                {assistantName}
+            {agentName && ` - `}
+            {agentName && (
+              <a href={`https://phonevoice.ai/agents/${agentId}`} className="text-blue-500 underline" target="_blank">
+                {agentName}
               </a>
             )}
           </h1>
@@ -797,9 +797,9 @@ export default function App() {
                 <Waveform 
                   color1="rgba(255, 134, 71, 1)"
                   color2="rgba(255, 64, 19, 1)"
-                  label1="Assistant"
+                  label1="Agent"
                   label2="User"
-                  analyserNode1={assistantAnalyser.current}
+                  analyserNode1={agentAnalyser.current}
                   analyserNode2={userAnalyser.current}
                 />
               </div>
@@ -814,7 +814,7 @@ export default function App() {
               events={events}
               isSessionActive={isSessionActive}
               userAnalyser={userAnalyser.current}
-              assistantAnalyser={assistantAnalyser.current}
+              agentAnalyser={agentAnalyser.current}
             />
           </section>
         </section>

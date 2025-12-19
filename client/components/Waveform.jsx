@@ -107,7 +107,7 @@ const Waveform = ({ color1, color2, label1, label2, analyserNode1, analyserNode2
       };
 
       // Obtenir et dessiner les données pour chaque analyseur
-      // Dessiner Assistant d'abord (Arrière plan ?) ou superposition ?
+      // Dessiner Agent d'abord (Arrière plan ?) ou superposition ?
       // Mode 'screen' pour mélange lumineux
       ctx.globalCompositeOperation = 'screen';
 
