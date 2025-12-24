@@ -48,7 +48,13 @@ export default function App() {
   });
   const [hasAgentError, setHasAgentError] = useState(false);
   const [firstMessage, setFirstMessage] = useState('');
-  const [selectedVoice, setSelectedVoice] = useState('cedar');
+  const [selectedVoice, setSelectedVoice] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('voice') || 'cedar';
+    }
+    return 'cedar';
+  });
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
   const [agentAudioStream, setAgentAudioStream] = useState(null);
@@ -543,6 +549,10 @@ export default function App() {
     const glowParam = params.get('glow');
     if (glowParam === 'true' || glowParam === '1') setGlow(true);
 
+    // Check for voice param
+    const voiceParam = params.get('voice');
+    if (voiceParam) setSelectedVoice(voiceParam);
+
     setAgentId(agent_id);
     if (agent_id) {
       fetchAgentData(agent_id);
@@ -570,6 +580,10 @@ export default function App() {
       setAgentId(agent_id);
       setFirstMessage(data.first_message || '');
       setHasAgentError(false);
+      
+      if (data.realtime_voice) {
+        setSelectedVoice(data.realtime_voice);
+      }
     } catch (error) {
       console.error('Error fetching agent data:', error);
       setHasAgentError(true);
